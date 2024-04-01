@@ -1,35 +1,61 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import React, { useState, useContext, Suspense } from "react";
+import AppContext from "./context/AppContext";
+import { Route, Routes } from "react-router-dom";
+import "./App.css";
+import NavBar from "./components/NavBar";
+import ErrorModal from "./components/ErrorModal";
+
+const Home = React.lazy(() => import("./pages/Home"));
+const Login = React.lazy(() => import("./pages/Login"));
+const Register = React.lazy(() => import("./pages/Register"));
+const Orders = React.lazy(() => import("./pages/Orders"));
+const Cart = React.lazy(() => import("./pages/Cart"));
+const ManageListings = React.lazy(() => import("./pages/ManageListings"));
+const MerchantManageOrders = React.lazy(() =>
+  import("./pages/MerchantManageOrders")
+);
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [accessToken, setAccessToken] = useState("");
+  const [role, setRole] = useState("");
+  const [showLogin, setShowLogin] = useState(true);
+  const [isError, setIsError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+
+  const dismissError = () => {
+    setIsError(() => !isError);
+  };
 
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <Suspense>
+      <AppContext.Provider
+        value={{
+          accessToken,
+          setAccessToken,
+          role,
+          setRole,
+          showLogin,
+          setShowLogin,
+          isError,
+          setIsError,
+          errorMessage,
+          setErrorMessage,
+        }}
+      >
+        <NavBar />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/history" element={<Orders />} />
+          <Route path="/cart" element={<Cart />} />
+          <Route path="/listings" element={<ManageListings />} />
+          <Route path="/orders" element={<MerchantManageOrders />} />
+        </Routes>
+        {isError && <ErrorModal okayClick={dismissError} />}
+      </AppContext.Provider>
+    </Suspense>
+  );
 }
 
-export default App
+export default App;
