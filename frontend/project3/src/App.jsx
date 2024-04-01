@@ -52,7 +52,9 @@ function App() {
           <Route path="/listings" element={<ManageListings />} />
           <Route path="/orders" element={<MerchantManageOrders />} />
         </Routes>
-        {isError && <ErrorModal okayClick={dismissError} />}
+        {isError && (
+          <ErrorModal okayClick={dismissError} content={errorMessage} />
+        )}
       </AppContext.Provider>
     </Suspense>
   );

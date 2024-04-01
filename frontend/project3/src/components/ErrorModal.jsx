@@ -12,13 +12,7 @@ const Overlay = (props) => {
         <header className={styles.errorHeader}>
           <h2>{props.title}Error</h2>
         </header>
-        <div className={styles.content}>
-          {props.content}
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Deleniti
-          tempore esse ducimus quibusdam ipsa inventore modi adipisci aliquam
-          veniam sequi libero, magni dolor culpa harum repellendus tempora
-          explicabo? Doloremque, ipsam.
-        </div>
+        <div className={styles.content}>{props.content}</div>
         <footer className={styles.actions}>
           <button onClick={props.okayClick} className={``}>
             Cancel
@@ -33,7 +27,7 @@ const ListingModal = (props) => {
   return (
     <>
       {ReactDOM.createPortal(
-        <Overlay okayClick={props.okayClick} />,
+        <Overlay okayClick={props.okayClick} content={props.content} />,
         document.querySelector("#modal-root")
       )}
     </>
