@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import useFetch from "../hooks/useFetch";
 import AppContext from "../context/AppContext";
 import styles from "./styles/Register.module.css";
@@ -66,6 +66,7 @@ const Register = () => {
   const fetchData = useFetch();
   const appCtx = useContext(AppContext);
 
+  const [roles, setRoles] = useState([]);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [accountType, setAccountType] = useState("user");
@@ -85,26 +86,42 @@ const Register = () => {
         break;
       case "user-type":
         setAccountType(event.currentTarget.value);
+        break;
       case "name":
         setCompanyName(event.currentTarget.value);
+        break;
       case "address":
         setAddress(event.currentTarget.value);
+        break;
       case "area":
         setArea(event.currentTarget.value);
+        break;
       case "description":
         setDescription(event.currentTarget.value);
+        break;
       case "image":
         setImage(event.currentTarget.value);
+        break;
       default:
-        alert(
+        appCtx.setErrorMessage(
           `something went wrong! id: ${event.currentTarget.id}, value: ${event.currentTarget.value}`
         );
+        appCtx.isError(true);
+        break;
     }
-
-    setAccountType(event.currentTarget.value);
   };
 
-  const createUser = async (event) => {
+  const getRoles = async () => {
+    const res = await fetchData("/roles");
+    if (res.ok) {
+      setRoles(res.data);
+    } else {
+      appCtx.setErrorMessage(res.data);
+      appCtx.isError(true);
+    }
+  };
+
+  const registerUser = async (event) => {
     try {
       event.preventDefault();
       const newUser = {
@@ -112,6 +129,8 @@ const Register = () => {
         password: password,
         role: accountType,
       };
+      console.log(accountType);
+      console.log(companyName);
 
       if (accountType === "merchant" && companyName)
         newUser.companyName = companyName;
@@ -125,6 +144,14 @@ const Register = () => {
       const res = await fetchData("/auth/register", "PUT", newUser, undefined);
       if (res.ok) {
         console.log("successful");
+        setEmail("");
+        setPassword("");
+        setAccountType("");
+        setCompanyName("");
+        setAddress("");
+        setArea("");
+        setDescription("");
+        setImage("");
       }
     } catch (error) {
       console.error(error.message);
@@ -133,27 +160,51 @@ const Register = () => {
     }
   };
 
+  useEffect(() => {
+    getRoles();
+  }, []);
+
   return (
     <>
       <div>Register</div>
       <form>
-        <label htmlFor="email">Email</label>
-        <input id="email" type="email" />
-        <label htmlFor="password">Password</label>
-        <input id="password" type="password" />
-        <label htmlFor="user-type">User Type</label>
+        <label htmlFor="email">
+          Email<span class={styles.required}>*</span>
+        </label>
+        <input id="email" type="email" onChange={handleChange} />
+        <label htmlFor="password">
+          Password<span class={styles.required}>*</span>
+        </label>
+        <input id="password" type="password" onChange={handleChange} />
+        <label htmlFor="user-type">
+          User Type<span class={styles.required}>*</span>
+        </label>
         <select defaultValue="user" id="user-type" onChange={handleChange}>
+          {roles &&
+            roles.map((role) => {
+              return (
+                <option value={role} key={role}>
+                  {role}
+                </option>
+              );
+            })}
           <option value="user">User</option>
           <option value="merchant">Merchant</option>
         </select>
         {accountType === "merchant" && (
           <>
-            <label htmlFor="name">Company Name</label>
-            <input id="name" type="text" />
-            <label htmlFor="address">Address</label>
-            <input id="address" type="text" />
-            <label htmlFor="area">Area</label>
-            <select defaultValue="" id="area">
+            <label htmlFor="name">
+              Company Name<span class={styles.required}>*</span>
+            </label>
+            <input id="name" type="text" onChange={handleChange} />
+            <label htmlFor="address">
+              Address<span class={styles.required}>*</span>
+            </label>
+            <input id="address" type="text" onChange={handleChange} />
+            <label htmlFor="area">
+              Area<span class={styles.required}>*</span>
+            </label>
+            <select defaultValue="" id="area" onChange={handleChange}>
               <option value="" disabled></option>
               {areas.map((area) => (
                 <option value={area} key={area}>
@@ -161,17 +212,22 @@ const Register = () => {
                 </option>
               ))}
             </select>
-            <label htmlFor="description">Description</label>
+            <label htmlFor="description">
+              Description<span class={styles.required}>*</span>
+            </label>
             <textarea
               id="description"
               type="text"
               placeholder="Description of your business to users"
+              onChange={handleChange}
             />
-            <label htmlFor="image">Image URL</label>
-            <input id="image" type="text" />
+            <label htmlFor="image">Company Image URL</label>
+            <input id="image" type="text" onChange={handleChange} />
           </>
         )}
-        <button onClick={createUser}>Create User</button>
+        <button type="submit" onClick={registerUser}>
+          Create User
+        </button>
       </form>
     </>
   );
