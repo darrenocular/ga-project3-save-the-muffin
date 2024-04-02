@@ -39,7 +39,7 @@ const seedListings = async (req, res) => {
         collectionDate: new Date("2024-04-05T17:00:00"),
       },
       {
-        merchant: "660b73d4f4e248c36c993f2d",
+        merchant: "660b7406f4e248c36c993f2f",
         name: "Nasi Lemak",
         originalPrice: 3,
         discountedPrice: 2.5,
@@ -102,6 +102,16 @@ const getListingById = async (req, res) => {
   }
 };
 
+const getListingsByMerchantId = async (req, res) => {
+  try {
+    const listings = await Listings.find({ merchant: req.body.merchant });
+    res.json(listings);
+  } catch (error) {
+    console.error(error.message);
+    res.status(400).json({ status: "error", msg: "failed to get listings" });
+  }
+};
+
 module.exports = {
   getAllListings,
   addNewListing,
@@ -109,4 +119,5 @@ module.exports = {
   deleteListingById,
   getListingById,
   seedListings,
+  getListingsByMerchantId,
 };
