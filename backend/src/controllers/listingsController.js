@@ -80,6 +80,10 @@ const addNewListing = async (req, res) => {
 
 const updateListingById = async (req, res) => {
   try {
+    await Listings.findByIdAndUpdate(req.body.id, req.body, {
+      runValidators: true,
+    });
+    res.json({ status: "ok", msg: "listing updated" });
   } catch (error) {
     console.error(error.message);
     res.status(400).json({ status: "error", msg: "failed to update listing" });
@@ -88,6 +92,8 @@ const updateListingById = async (req, res) => {
 
 const deleteListingById = async (req, res) => {
   try {
+    await Listings.findByIdAndDelete(req.body.id);
+    res.json({ status: "ok", msg: "listing deleted" });
   } catch (error) {
     console.error(error.message);
     res.status(400).json({ status: "error", msg: "failed to delete listing" });
@@ -96,6 +102,8 @@ const deleteListingById = async (req, res) => {
 
 const getListingById = async (req, res) => {
   try {
+    const listing = await Listings.findById(req.body.id);
+    res.json(listing);
   } catch (error) {
     console.error(error.message);
     res.status(400).json({ status: "error", msg: "failed to get listing" });
