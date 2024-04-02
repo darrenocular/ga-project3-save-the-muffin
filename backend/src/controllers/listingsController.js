@@ -1,4 +1,4 @@
-const Listings = require("../models/Listing");
+const { Listings, ListingSchema } = require("../models/Listing");
 
 const getAllListings = async (req, res) => {
   try {
@@ -120,6 +120,17 @@ const getListingsByMerchantId = async (req, res) => {
   }
 };
 
+const getEnum = async (req, res) => {
+  try {
+    const foodCategories = await ListingSchema.path("category").enumValues;
+
+    res.json({ foodCategories });
+  } catch (error) {
+    console.error(error.message);
+    res.status(400).json({ status: "error", msg: "failed to get enum" });
+  }
+};
+
 module.exports = {
   getAllListings,
   addNewListing,
@@ -128,4 +139,5 @@ module.exports = {
   getListingById,
   seedListings,
   getListingsByMerchantId,
+  getEnum,
 };
