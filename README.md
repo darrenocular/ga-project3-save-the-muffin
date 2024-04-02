@@ -2,7 +2,7 @@
 
 ## Introduction
 
-An MERN app that allows you to purchase unsold food items for value and do your bid to reduce food wastage.
+A MERN app that allows you to purchase unsold food items for value and do your bid to reduce food wastage.
 
 ## Technology
 
