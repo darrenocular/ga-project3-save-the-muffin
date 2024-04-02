@@ -49,6 +49,11 @@ const getCartByUserId = async (req, res) => {
 
 const updateCartItem = async (req, res) => {
   try {
+    await Cart.findByIdAndUpdate(req.body.id, req.body, {
+      runValidators: true,
+    });
+
+    res.json({ status: "ok", msg: "cart item updated" });
   } catch (error) {
     console.error(error.message);
     res
@@ -59,6 +64,8 @@ const updateCartItem = async (req, res) => {
 
 const deleteCartItem = async (req, res) => {
   try {
+    await Cart.findByIdAndDelete(req.body.id);
+    res.json({ status: "ok", msg: "cart item deleted" });
   } catch (error) {
     console.error(error.message);
     res
@@ -67,9 +74,21 @@ const deleteCartItem = async (req, res) => {
   }
 };
 
+const clearUserCart = async (req, res) => {
+  try {
+    await Cart.deleteMany({ user: req.body.user });
+
+    res.json({ status: "ok", msg: "cart cleared" });
+  } catch (error) {
+    console.error(error.message);
+    res.status(400).json({ status: "error", msg: "failed to clear cart" });
+  }
+};
+
 module.exports = {
   seedCart,
   getCartByUserId,
   updateCartItem,
   deleteCartItem,
+  clearUserCart,
 };
