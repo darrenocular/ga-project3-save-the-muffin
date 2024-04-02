@@ -1,12 +1,15 @@
 const express = require("express");
 const router = express.Router();
 const {
+  seedOrders,
   getOrdersByUserId,
   addNewOrder,
   getOrdersByMerchantId,
   updateOrderById,
   deleteOrderById,
 } = require("../controllers/ordersController");
+
+router.get("/orders/seed", seedOrders);
 
 // User routes for orders
 router.post("/orders", getOrdersByUserId); // get user's orders sorted in date descending order

@@ -10,7 +10,10 @@ const OrderSchema = new mongoose.Schema(
     },
     purchaseQuantity: { type: Number, required: true },
     isCollected: { type: Boolean, default: false },
-    totalPrice: { type: Number, default: () => purchaseQuantity * totalPrice },
+    totalPrice: {
+      type: Number,
+      default: 0,
+    },
   },
   {
     timestamps: true,
