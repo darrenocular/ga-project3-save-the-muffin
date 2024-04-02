@@ -7,22 +7,22 @@ const seedCart = async (req, res) => {
     await Cart.create([
       {
         user: "660b7382f4e248c36c993f29",
-        listing: "660ba0d63ca981e1aaa6626c",
+        listing: "660bad3fc922afc10866d612", // nasi lemak
         cartQuantity: 5,
       },
       {
         user: "660b7382f4e248c36c993f29",
-        listing: "660ba0d53ca981e1aaa6626a",
+        listing: "660bad3fc922afc10866d610", // blueberry muffin
         cartQuantity: 4,
       },
       {
         user: "660b73a2f4e248c36c993f2b",
-        listing: "660ba0d53ca981e1aaa6626a",
+        listing: "660bad3fc922afc10866d610", // blueberry muffin
         cartQuantity: 5,
       },
       {
         user: "660b73a2f4e248c36c993f2b",
-        listing: "660ba0d53ca981e1aaa6626b",
+        listing: "660bad3fc922afc10866d611", // banana walnut muffin
         cartQuantity: 5,
       },
     ]);
@@ -47,7 +47,7 @@ const getCartByUserId = async (req, res) => {
   }
 };
 
-const updateCartItemByUserId = async (req, res) => {
+const updateCartItem = async (req, res) => {
   try {
   } catch (error) {
     console.error(error.message);
@@ -57,7 +57,7 @@ const updateCartItemByUserId = async (req, res) => {
   }
 };
 
-const deleteCartItemByUserId = async (req, res) => {
+const deleteCartItem = async (req, res) => {
   try {
   } catch (error) {
     console.error(error.message);
@@ -70,6 +70,6 @@ const deleteCartItemByUserId = async (req, res) => {
 module.exports = {
   seedCart,
   getCartByUserId,
-  updateCartItemByUserId,
-  deleteCartItemByUserId,
+  updateCartItem,
+  deleteCartItem,
 };
