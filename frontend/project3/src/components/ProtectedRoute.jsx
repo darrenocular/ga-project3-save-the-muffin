@@ -1,10 +1,55 @@
 import React, { useState, useEffect, useContext } from "react";
 import AppContext from "../context/AppContext";
 import { Navigate } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
+import useFetch from "../hooks/useFetch";
 
 const ProtectedRoute = (props) => {
   const appCtx = useContext(AppContext);
   const [shouldNavigate, setShouldNavigate] = useState(false);
+  const fetchData = useFetch();
+
+  const refreshAccessToken = async () => {
+    try {
+      const refreshToken = localStorage.getItem("refreshToken");
+      if (refreshToken) {
+        console.log("found refresh token");
+        const res = await fetchData("/auth/refresh", "POST", {
+          refresh: refreshToken,
+        });
+
+        if (res.ok) {
+          appCtx.setAccessToken(res.data.access);
+          const decoded = jwtDecode(res.data.access);
+          const expirationDate = new Date(decoded.exp * 1000);
+          appCtx.setExpirationDate(expirationDate);
+          return true;
+        } else {
+          // log out and redirect to login because refresh token has expired
+          console.log("refresh failed, redirecting to login.");
+          appCtx.logOut();
+          appCtx.setShowLogin(true);
+        }
+      } else {
+        // log out because no refresh token was found
+        console.log("no refresh token");
+        appCtx.logOut();
+        appCtx.setShowLogin(true);
+      }
+    } catch (error) {
+      console.error(error.message);
+      appCtx.logOut();
+    }
+  };
+
+  const checkAndRefreshToken = async () => {
+    if (appCtx.expirationDate && appCtx.expirationDate < Date.now()) {
+      const refreshed = await refreshAccessToken();
+      if (!refreshed) {
+        appCtx.setShowLogin(true);
+      }
+    }
+  };
 
   useEffect(() => {
     // if user role is not the same as requiredRole, show an error modal that lasts for three seconds before navigating to home page.
@@ -22,9 +67,13 @@ const ProtectedRoute = (props) => {
     }
   }, [props.requiredRole, appCtx.role]);
 
-  // if no access token is provided when accessing the children page, immediately redirect user to login.
+  useEffect(() => {
+    checkAndRefreshToken();
+  }, []);
+
+  // if no access token is provided when accessing the children page or refresh token expired, immediately redirect user to login.
   // else if above useEffect determines that account role !== required role, navigate to home page
-  if (!appCtx.accessToken) {
+  if (!appCtx.accessToken || appCtx.showLogin) {
     return <Navigate to="/login" replace />;
   } else if (shouldNavigate) {
     return <Navigate to="/" replace />;
