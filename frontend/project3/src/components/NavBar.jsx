@@ -1,7 +1,6 @@
 import React, { useContext, useEffect } from "react";
 import { NavLink } from "react-router-dom";
 import AppContext from "../context/AppContext";
-import styles from "./styles/NavBar.module.css";
 
 const NavBar = () => {
   const appCtx = useContext(AppContext);
