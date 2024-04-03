@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import useFetch from "../hooks/useFetch";
 import AppContext from "../context/AppContext";
 import { jwtDecode } from "jwt-decode";
@@ -10,8 +10,9 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleLogin = async () => {
+  const handleLogin = async (event) => {
     try {
+      event.preventDefault();
       const res = await fetchData(
         "/auth/login",
         "POST",
@@ -22,14 +23,23 @@ const Login = () => {
       if (res.ok) {
         appCtx.setAccessToken(res.data.access);
         const decoded = jwtDecode(res.data.access);
+        const expirationDate = new Date(decoded.exp * 1000);
+        appCtx.setExpirationDate(expirationDate);
         appCtx.setId(decoded.id);
         appCtx.setRole(decoded.role);
+        localStorage.setItem("refreshToken", res.data.refresh);
+        setEmail("");
+        setPassword("");
       }
     } catch (error) {
       appCtx.setErrorMessage(JSON.stringify(res.data));
       appCtx.isError(true);
     }
   };
+
+  useEffect(() => {
+    appCtx.setShowLogin(false);
+  }, []);
 
   return (
     <>
@@ -41,6 +51,7 @@ const Login = () => {
           type="email"
           placeholder="example@email.com"
           onChange={(event) => setEmail(event.target.value)}
+          value={email}
           required
         />
         <label htmlFor="password">Password</label>
@@ -48,6 +59,7 @@ const Login = () => {
           id="password"
           type="password"
           onChange={(event) => setPassword(event.target.value)}
+          value={password}
           required
         />
         <p>

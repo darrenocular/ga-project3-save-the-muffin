@@ -1,6 +1,7 @@
-import React, { useState, useContext, Suspense } from "react";
+import React, { useState, useEffect, Suspense } from "react";
 import AppContext from "./context/AppContext";
-import { Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes } from "react-router-dom";
+import useFetch from "./hooks/useFetch";
 import "./App.css";
 import NavBar from "./components/NavBar";
 import ErrorModal from "./components/ErrorModal";
@@ -17,15 +18,28 @@ const MerchantManageOrders = React.lazy(() =>
 );
 
 function App() {
-  const [accessToken, setAccessToken] = useState("X");
-  const [role, setRole] = useState("user");
+  const [accessToken, setAccessToken] = useState("");
+  const [role, setRole] = useState("");
   const [id, setId] = useState("");
+  const [expirationDate, setExpirationDate] = useState("");
   const [showLogin, setShowLogin] = useState(true);
   const [isError, setIsError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const fetchData = useFetch();
 
   const dismissError = () => {
     setIsError(() => !isError);
+  };
+
+  const logOut = () => {
+    console.log("logging out");
+    setExpirationDate("");
+    setAccessToken("");
+    setRole("");
+    setId("");
+    if (localStorage.getItem("refreshToken")) {
+      localStorage.removeItem("refreshToken");
+    }
   };
 
   return (
@@ -38,12 +52,15 @@ function App() {
           setRole,
           id,
           setId,
+          expirationDate,
+          setExpirationDate,
           showLogin,
           setShowLogin,
           isError,
           setIsError,
           errorMessage,
           setErrorMessage,
+          logOut,
         }}
       >
         <NavBar />
