@@ -2,7 +2,7 @@ const { Listings, ListingSchema } = require("../models/Listing");
 
 const getAllListings = async (req, res) => {
   try {
-    const listings = await Listings.find();
+    const listings = await Listings.find().populate("merchant").exec();
 
     res.json(listings);
   } catch (error) {
