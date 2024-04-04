@@ -1,0 +1,7 @@
+.navbar {
+  height: var(--navbar-height);
+}
+
+.required {
+  color: red;
+}

@@ -1,4 +1,5 @@
 const { body } = require("express-validator");
+const { ListingSchema } = require("../models/Listing");
 
 const validateNewListingInput = [
   body("merchant", "merchant id is required").not().isEmpty(),
@@ -23,14 +24,15 @@ const validateNewListingInput = [
   }),
   body("description", "invalid description").isLength({ min: 0, max: 500 }),
   body("category", "category is required").not().isEmpty(),
-  body("category", "invalid category").isIn([
-    "asian",
-    "beverages",
-    "western",
-    "dessert",
-    "salad",
-    "pastries",
-  ]),
+  body("category").custom(async (value) => {
+    const categories = await ListingSchema.path("category").enumValues;
+    result = categories.includes(value);
+    if (result) {
+      return true;
+    } else {
+      throw new Error("category has to be in enum list");
+    }
+  }),
   body("image", "invalid image url").isLength({ min: 0, max: 500 }),
   body("collectionDate", "date/time is required").not().isEmpty(),
   body("collectionDate", "invalid date/time").isISO8601(),

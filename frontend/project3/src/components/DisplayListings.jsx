@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import styles from "./styles/DisplayListings.module.css";
 import Listing from "./Listing";
 import useFetch from "../hooks/useFetch";
 import AppContext from "../context/AppContext";
 
-const DisplayListings = () => {
+const DisplayListings = (props) => {
   const [myListings, setMyListings] = useState([]);
   const appCtx = useContext(AppContext);
   const fetchData = useFetch();
@@ -19,7 +19,6 @@ const DisplayListings = () => {
       );
 
       if (res.ok) {
-        console.log(res.data);
         setMyListings(res.data);
       }
     } catch (error) {
@@ -32,15 +31,23 @@ const DisplayListings = () => {
     getListingByMerchant();
   }, []);
 
+  useEffect(() => {
+    if (props.refreshListings) {
+      getListingByMerchant();
+      props.setRefreshListings(false);
+    }
+  }, [props.refreshListings]);
+
   return (
-    <>
-      <div>Listings</div>
+    <div className="flex-col overflow-y-auto p-3 grow">
+      <h2 className="text-base font-semibold leading-7 text-gray-900">
+        Your Listings
+      </h2>
       {myListings &&
-        myListings.map((listing) => {
-          return <Listing listing={listing} key={listing.id} />;
+        myListings.map((listing, idx) => {
+          return <Listing listing={listing} key={idx} />;
         })}
-      <Listing />
-    </>
+    </div>
   );
 };
 
