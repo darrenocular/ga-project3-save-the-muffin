@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const {
   seedCart,
+  addCartItem,
   getCartByUserId,
   updateCartItem,
   deleteCartItem,
@@ -10,10 +11,18 @@ const {
 const {
   validateUserIdInBody,
   validateCartIdAndQuantityInBody,
+  validateListingIdAndQuantityInBody,
 } = require("../validators/cartItemsValidator");
 const { errorCheck } = require("../validators/errorCheck");
 
 router.get("/cart/seed", seedCart); // seed cart by user id
+router.put(
+  "/cart",
+  validateUserIdInBody,
+  validateListingIdAndQuantityInBody,
+  errorCheck,
+  addCartItem
+); // add cart item
 router.post("/cart", validateUserIdInBody, errorCheck, getCartByUserId); // get user's cart items
 router.patch(
   "/cart",
