@@ -2,6 +2,7 @@ const { body } = require("express-validator");
 
 const validateNewListingInput = [
   body("merchant", "merchant id is required").not().isEmpty(),
+  body("merchant", "invalid merchant id").isMongoId(),
   body("merchant", "invalid merchant id").isLength({ min: 24, max: 24 }),
   body("name", "name is required").not().isEmpty(),
   body("name", "invalid name").isLength({ min: 1, max: 50 }),
@@ -37,8 +38,10 @@ const validateNewListingInput = [
 
 const validateUpdateListingInput = [
   body("id", "listing id is required").not().isEmpty(),
+  body("id", "invalid listing id").isMongoId(),
   body("id", "invalid listing id").isLength({ min: 24, max: 24 }),
   body("merchant", "merchant id is required").optional().not().isEmpty(),
+  body("merchant", "invalid merchant id").isMongoId(),
   body("merchant", "invalid merchant id")
     .if(body("merchant").not().isEmpty())
     .isLength({ min: 24, max: 24 }),

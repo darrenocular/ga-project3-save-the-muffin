@@ -2,16 +2,37 @@ const express = require("express");
 const router = express.Router();
 const {
   checkDuplicateEmail,
+  checkPassword,
   register,
   login,
   refresh,
   getEnum,
 } = require("../controllers/authController");
+const {
+  validatePasswordPresent,
+  validateEmailPresent,
+  validateRefresh,
+  validatePasswordStrength,
+} = require("../validators/authValidator");
+const { validateRegistration } = require("../validators/validateRegistration");
+const { errorCheck } = require("../validators/errorCheck");
 
 router.post("/check-email", checkDuplicateEmail);
-router.put("/register", register);
-router.post("/login", login);
-router.post("/refresh", refresh);
+router.post(
+  "/check-password",
+  validatePasswordStrength,
+  errorCheck,
+  checkPassword
+);
+router.put("/register", validateRegistration, errorCheck, register);
+router.post(
+  "/login",
+  validateEmailPresent,
+  validatePasswordPresent,
+  errorCheck,
+  login
+);
+router.post("/refresh", validateRefresh, errorCheck, refresh);
 router.get("/enum", getEnum);
 
 module.exports = router;

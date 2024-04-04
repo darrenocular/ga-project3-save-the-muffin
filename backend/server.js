@@ -31,6 +31,15 @@ app.use("/api", cartItemsRouter);
 app.use("/api", ordersRouter);
 app.use("/auth", authRouter);
 
+app.use((err, req, res, next) => {
+  if (err instanceof SyntaxError && err.status === 400 && "body" in err) {
+    console.log(err);
+    return res
+      .status(404)
+      .json({ status: "error", msg: "an error has occurred" });
+  }
+});
+
 const PORT = process.env.PORT || 5001;
 
 app.listen(PORT, () => {

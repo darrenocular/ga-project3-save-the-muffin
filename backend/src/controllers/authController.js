@@ -18,6 +18,17 @@ const checkDuplicateEmail = async (req, res) => {
   }
 };
 
+const checkPassword = async (req, res) => {
+  try {
+    return res.json({ status: "ok", msg: "password valid" });
+  } catch (error) {
+    console.error(error.message);
+    res
+      .status(400)
+      .json({ status: "error", msg: "error in checking password strength" });
+  }
+};
+
 const register = async (req, res) => {
   try {
     const emailRegex = new RegExp(`^${req.body.email}$`, "i");
@@ -129,4 +140,11 @@ const getEnum = async (req, res) => {
   }
 };
 
-module.exports = { checkDuplicateEmail, register, login, refresh, getEnum };
+module.exports = {
+  checkDuplicateEmail,
+  checkPassword,
+  register,
+  login,
+  refresh,
+  getEnum,
+};
