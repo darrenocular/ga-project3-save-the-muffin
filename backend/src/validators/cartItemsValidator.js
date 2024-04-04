@@ -16,4 +16,16 @@ const validateCartIdAndQuantityInBody = [
     .isInt({ min: 0, max: 1000 }),
 ];
 
-module.exports = { validateUserIdInBody, validateCartIdAndQuantityInBody };
+const validateListingIdAndQuantityInBody = [
+  body("listing", "listing id is required").not().isEmpty(),
+  body("listing", "invalid listing id").isLength({ min: 24, max: 24 }),
+  body("listing", "invalid listing id").isMongoId(),
+  body("cartQuantity", "cart quantity is required").not().isEmpty(),
+  body("cartQuantity", "invalid cart quantity").isInt({ min: 0, max: 1000 }),
+];
+
+module.exports = {
+  validateUserIdInBody,
+  validateCartIdAndQuantityInBody,
+  validateListingIdAndQuantityInBody,
+};

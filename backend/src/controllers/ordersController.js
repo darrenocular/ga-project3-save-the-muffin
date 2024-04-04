@@ -1,5 +1,6 @@
 const Orders = require("../models/Order");
 const { Listings } = require("../models/Listing");
+const CartItem = require("../models/CartItem");
 
 const seedOrders = async (req, res) => {
   try {

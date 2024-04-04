@@ -34,6 +34,22 @@ const seedCart = async (req, res) => {
   }
 };
 
+const addCartItem = async (req, res) => {
+  try {
+    const newCartItem = {
+      user: req.body.user,
+      listing: req.body.listing,
+      cartQuantity: req.body.cartQuantity,
+    };
+
+    await Cart.create(newCartItem);
+    res.json({ status: "ok", msg: "cart item added" });
+  } catch (error) {
+    console.error(error.message);
+    res.status(400).json({ status: "error", msg: "failed to add cart item" });
+  }
+};
+
 const getCartByUserId = async (req, res) => {
   try {
     const cart = await Cart.find({ user: req.body.user })
@@ -87,6 +103,7 @@ const clearUserCart = async (req, res) => {
 
 module.exports = {
   seedCart,
+  addCartItem,
   getCartByUserId,
   updateCartItem,
   deleteCartItem,
