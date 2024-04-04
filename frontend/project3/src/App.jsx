@@ -69,7 +69,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route
-            path="/history"
+            path="/orders"
             element={
               <ProtectedRoute requiredRole="user">
                 <Orders />

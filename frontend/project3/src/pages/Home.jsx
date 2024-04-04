@@ -27,10 +27,12 @@ const Home = () => {
   };
 
   const getAreas = async () => {
-    const res = await fetchData("/auth/enum");
-    if (res.ok) {
-      setAreaList(res.data.areas);
-    } else {
+    try {
+      const res = await fetchData("/auth/enum");
+      if (res.ok) {
+        setAreaList(res.data.areas.sort());
+      }
+    } catch (error) {
       appCtx.setErrorMessage(res.data);
       appCtx.isError(true);
     }
