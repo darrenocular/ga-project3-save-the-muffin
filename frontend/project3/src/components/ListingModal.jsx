@@ -24,6 +24,7 @@ const Overlay = (props) => {
 
       if (res.ok) {
         setQuantity(0);
+        props.okayClick();
       } else {
         throw new Error(res.data);
       }

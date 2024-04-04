@@ -102,7 +102,7 @@ const CartItem = (props) => {
             </p>
           </div>
           <div>
-            <p className="text-sm leading-6 text-indigo-900 font-semibold">
+            <p className="text-sm leading-6 text-indigo-900 font-semibold mb-1.5">
               Quantity in cart: {props.cartItem.cartQuantity}
             </p>
             <form className="flex justify-between">
