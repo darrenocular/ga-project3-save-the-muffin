@@ -45,10 +45,10 @@ const Listing = (props) => {
               Quantity available: {props.listing.quantity}
             </p>
             <p className="mt-1 text-sm leading-5 text-gray-400">
-              <s>S${props.listing.originalPrice}</s>{" "}
+              <s>S${props.listing.originalPrice.toFixed(2)}</s>{" "}
               <span className="text-indigo-700 font-semibold">
                 S$
-                {props.listing.discountedPrice}
+                {props.listing.discountedPrice.toFixed(2)}
               </span>
             </p>
           </div>
