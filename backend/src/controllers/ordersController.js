@@ -1,6 +1,7 @@
 const Orders = require("../models/Order");
 const { Listings } = require("../models/Listing");
 const CartItem = require("../models/CartItem");
+const mongoose = require("mongoose");
 
 const seedOrders = async (req, res) => {
   try {
@@ -53,7 +54,48 @@ const getOrdersByUserId = async (req, res) => {
   }
 };
 
-const addNewOrder = async (req, res) => {};
+const addNewOrder = async (req, res) => {
+  //put api
+  try {
+    const { user, merchant, listing, purchaseQuantity, totalPrice } = req.body;
+
+    // Check if merchant and listing are valid ObjectIds
+    if (
+      !mongoose.Types.ObjectId.isValid(merchant) ||
+      !mongoose.Types.ObjectId.isValid(listing)
+    ) {
+      return res
+        .status(400)
+        .json({ status: "error", msg: "Invalid merchant or listing ID" });
+    }
+
+    // Check if purchaseQuantity is provided
+    if (!purchaseQuantity) {
+      return res
+        .status(400)
+        .json({ status: "error", msg: "Purchase quantity is required" });
+    }
+
+    const newOrder = new Orders({
+      user,
+      merchant,
+      listing,
+      purchaseQuantity,
+      totalPrice,
+    });
+
+    await newOrder.save();
+
+    res.json({
+      status: "ok",
+      msg: "Order added successfully",
+      order: newOrder,
+    });
+  } catch (error) {
+    console.error(error.message);
+    res.status(400).json({ status: "error", msg: "Failed to add new order" });
+  }
+};
 
 const getOrdersByMerchantId = async (req, res) => {
   try {
@@ -68,9 +110,59 @@ const getOrdersByMerchantId = async (req, res) => {
   }
 };
 
-const updateOrderById = async (req, res) => {};
+//patch
+const updateOrderById = async (req, res) => {
+  try {
+    // const orderId = req.params.orderId;
+    const { purchaseQuantity, totalPrice, orderId } = req.body;
+    console.log(orderId);
 
-const deleteOrderById = async (req, res) => {};
+    const updatedOrder = await Orders.findByIdAndUpdate(
+      orderId,
+      {
+        purchaseQuantity,
+        totalPrice,
+      },
+      { new: true }
+    );
+
+    if (!updatedOrder) {
+      return res.status(404).json({ status: "error", msg: "Order not found" });
+    }
+
+    res.json({
+      status: "ok",
+      msg: "Order updated successfully",
+      order: updatedOrder,
+    });
+  } catch (error) {
+    console.error(error.message);
+    res.status(400).json({ status: "error", msg: "Failed to update order" });
+  }
+};
+
+//delete one
+const deleteOrderById = async (req, res) => {
+  try {
+    // const orderId = req.params.orderId;
+    const { orderId } = req.body;
+
+    const deletedOrder = await Orders.findByIdAndDelete(orderId);
+
+    if (!deletedOrder) {
+      return res.status(404).json({ status: "error", msg: "Order not found" });
+    }
+
+    res.json({
+      status: "ok",
+      msg: "Order deleted successfully",
+      order: deletedOrder,
+    });
+  } catch (error) {
+    console.error(error.message);
+    res.status(400).json({ status: "error", msg: "Failed to delete order" });
+  }
+};
 
 module.exports = {
   seedOrders,
