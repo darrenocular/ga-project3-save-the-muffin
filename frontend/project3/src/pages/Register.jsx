@@ -126,7 +126,6 @@ const Register = () => {
         throw new Error(res.data);
       }
     } catch (error) {
-      console.error(error.message);
       appCtx.setErrorMessage(error.message);
       appCtx.setIsError(true);
     }
