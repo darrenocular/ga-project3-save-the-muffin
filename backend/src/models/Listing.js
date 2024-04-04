@@ -1,12 +1,12 @@
 const mongoose = require("mongoose");
 
 const foodCategories = [
-  "asian",
-  "beverages",
-  "western",
-  "dessert",
-  "salad",
-  "pastries",
+  "Asian",
+  "Beverages",
+  "Western",
+  "Dessert",
+  "Salad",
+  "Pastries",
 ];
 
 const ListingSchema = new mongoose.Schema(

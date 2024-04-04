@@ -3,6 +3,7 @@ const router = express.Router();
 const {
   getAllListings,
   seedListings,
+  getAllCategories,
   addNewListing,
   updateListingById,
   deleteListingById,
@@ -18,6 +19,7 @@ const { errorCheck } = require("../validators/errorCheck");
 
 router.get("/listings", getAllListings); // get all listings
 router.get("/listings/seed", seedListings); // seed listings
+router.get("/listings/categories", getAllCategories); // get food categories
 router.put("/listings", validateNewListingInput, errorCheck, addNewListing); // add a new listing
 router.patch(
   "/listings",

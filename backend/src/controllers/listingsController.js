@@ -25,7 +25,7 @@ const seedListings = async (req, res) => {
         discountedPrice: 1.5,
         quantity: 40,
         description: "Gluten-free",
-        category: "pastries",
+        category: "Pastries",
         collectionDate: new Date("2024-04-05T17:00:00"),
       },
       {
@@ -35,7 +35,7 @@ const seedListings = async (req, res) => {
         discountedPrice: 1.7,
         quantity: 40,
         description: "Allergy: nuts",
-        category: "pastries",
+        category: "Pastries",
         collectionDate: new Date("2024-04-05T17:00:00"),
       },
       {
@@ -45,7 +45,7 @@ const seedListings = async (req, res) => {
         discountedPrice: 2.5,
         quantity: 10,
         description: "Available with or without chilli",
-        category: "asian",
+        category: "Asian",
         collectionDate: new Date("2024-04-05T12:00:00"),
       },
     ]);
@@ -53,6 +53,18 @@ const seedListings = async (req, res) => {
   } catch (error) {
     console.error(error.message);
     res.status(400).json({ status: "error", msg: "seed fail" });
+  }
+};
+
+const getAllCategories = async (req, res) => {
+  try {
+    const categories = await ListingSchema.path("category").enumValues;
+    res.json(categories);
+  } catch (error) {
+    console.error(error.message);
+    res
+      .status(400)
+      .json({ status: "error", msg: "error getting food categories" });
   }
 };
 
@@ -112,7 +124,10 @@ const getListingById = async (req, res) => {
 
 const getListingsByMerchantId = async (req, res) => {
   try {
-    const listings = await Listings.find({ merchant: req.body.merchant });
+    const listings = await Listings.find({ merchant: req.body.merchant })
+      .populate("merchant")
+      .exec();
+
     res.json(listings);
   } catch (error) {
     console.error(error.message);
@@ -134,6 +149,7 @@ const getEnum = async (req, res) => {
 module.exports = {
   getAllListings,
   addNewListing,
+  getAllCategories,
   updateListingById,
   deleteListingById,
   getListingById,

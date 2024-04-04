@@ -15,14 +15,16 @@ const NavBar = () => {
 
   return (
     <div>
-      <div>Access token: {appCtx.accessToken}</div>
+      <div style={{ textWrap: "wrap", wordBreak: "break-all" }}>
+        Access token: {appCtx.accessToken}
+      </div>
       <div>
         Expiration: {appCtx.expirationDate.toLocaleString()}, Current Time:
         {new Date().toLocaleString()}
       </div>
       <div>Role: {appCtx.role}</div>
       <div>Id: {appCtx.id}</div>
-      <nav className="bg-indigo-800 h-16 flex items-center justify-between">
+      <nav className="bg-indigo-800 navbar flex items-center justify-between">
         <div className="flex flex-1 items-center justify-start">
           <div className="flex flex-shrink-0 items-center">
             <img

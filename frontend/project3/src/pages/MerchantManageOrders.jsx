@@ -1,5 +1,4 @@
-import React from "react";
-import styles from "./styles/MerchantManageOrders.module.css";
+import React, { useState } from "react";
 
 const MerchantManageOrders = () => {
   return (
