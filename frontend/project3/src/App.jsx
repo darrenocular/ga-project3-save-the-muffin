@@ -1,7 +1,6 @@
-import React, { useState, useEffect, Suspense } from "react";
+import React, { useState, Suspense } from "react";
 import AppContext from "./context/AppContext";
-import { Navigate, Route, Routes } from "react-router-dom";
-import useFetch from "./hooks/useFetch";
+import { Route, Routes } from "react-router-dom";
 import "./App.css";
 import NavBar from "./components/NavBar";
 import ErrorModal from "./components/ErrorModal";
@@ -25,7 +24,6 @@ function App() {
   const [showLogin, setShowLogin] = useState(true);
   const [isError, setIsError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
-  const fetchData = useFetch();
 
   const dismissError = () => {
     setIsError(() => !isError);
@@ -93,7 +91,7 @@ function App() {
             }
           />
           <Route
-            path="/orders"
+            path="/manage-orders"
             element={
               <ProtectedRoute requiredRole="merchant">
                 <MerchantManageOrders />

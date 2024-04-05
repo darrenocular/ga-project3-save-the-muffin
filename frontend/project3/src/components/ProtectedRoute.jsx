@@ -7,6 +7,7 @@ import useFetch from "../hooks/useFetch";
 const ProtectedRoute = (props) => {
   const appCtx = useContext(AppContext);
   const [shouldNavigate, setShouldNavigate] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const fetchData = useFetch();
 
   const refreshAccessToken = async () => {
@@ -23,6 +24,9 @@ const ProtectedRoute = (props) => {
           const decoded = jwtDecode(res.data.access);
           const expirationDate = new Date(decoded.exp * 1000);
           appCtx.setExpirationDate(expirationDate);
+          appCtx.setId(decoded.id);
+          appCtx.setRole(decoded.role);
+          appCtx.setShowLogin(false);
           return true;
         } else {
           // log out and redirect to login because refresh token has expired
@@ -43,22 +47,29 @@ const ProtectedRoute = (props) => {
   };
 
   const checkAndRefreshToken = async () => {
-    if (appCtx.expirationDate && appCtx.expirationDate < Date.now()) {
+    if (
+      (appCtx.expirationDate && appCtx.expirationDate < Date.now()) ||
+      (localStorage.getItem("refreshToken") && !appCtx.accessToken)
+    ) {
+      console.log("refreshing token");
       const refreshed = await refreshAccessToken();
       if (!refreshed) {
         appCtx.setShowLogin(true);
       }
     }
+    setIsLoading(false);
   };
 
   useEffect(() => {
     // if user role is not the same as requiredRole, show an error modal that lasts for three seconds before navigating to home page.
     if (props.requiredRole && appCtx.role !== props.requiredRole) {
-      appCtx.setErrorMessage("404 Forbidden, redirecting in 3 seconds.");
-      appCtx.setIsError(true);
       const timer = setTimeout(() => {
-        setShouldNavigate(true);
-      }, 3000);
+        appCtx.setErrorMessage("404 Forbidden, redirecting in 3 seconds.");
+        appCtx.setIsError(true);
+        setTimeout(() => {
+          setShouldNavigate(true);
+        }, 3000);
+      }, 1000);
 
       return () => {
         clearTimeout(timer);
@@ -70,6 +81,12 @@ const ProtectedRoute = (props) => {
   useEffect(() => {
     checkAndRefreshToken();
   }, []);
+
+  useEffect(() => {}, [appCtx.showLogin]);
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
 
   // if no access token is provided when accessing the children page or refresh token expired, immediately redirect user to login.
   // else if above useEffect determines that account role !== required role, navigate to home page

@@ -112,15 +112,14 @@ const refresh = async (req, res) => {
     const decoded = jwt.verify(req.body.refresh, process.env.REFRESH_SECRET);
 
     const claims = {
-      role: decoded.accountType,
-      id: decoded._id,
+      role: decoded.role,
+      id: decoded.id,
     };
 
     const access = jwt.sign(claims, process.env.ACCESS_SECRET, {
       expiresIn: "20m",
       jwtid: uuidv4(),
     });
-    console.log("refreshed access token");
     res.json({ access });
   } catch (error) {
     console.log(error.message);
