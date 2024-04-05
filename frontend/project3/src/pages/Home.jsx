@@ -7,18 +7,17 @@ const Home = () => {
   const fetchData = useFetch();
   const appCtx = useContext(AppContext);
   const [listings, setListings] = useState([]);
+  const [filteredListings, setFilteredListings] = useState([]);
   const [areaList, setAreaList] = useState([]);
   const [area, setArea] = useState("");
 
-  const getListingsByArea = async () => {
+  const getListings = async () => {
     try {
       const res = await fetchData("/api/listings");
 
       if (res.ok) {
-        const filteredListings = res.data.filter(
-          (listing) => listing.merchant.merchantDetails.area === area
-        );
-        setListings(filteredListings);
+        setListings(res.data);
+        setFilteredListings(res.data);
       }
     } catch (error) {
       appCtx.setErrorMessage(error.message);
@@ -45,12 +44,18 @@ const Home = () => {
 
   // Get areas list on mount
   useEffect(() => {
+    getListings();
     getAreas();
   }, []);
 
   // Get listings when area changes
   useEffect(() => {
-    getListingsByArea();
+    if (area !== "") {
+      const filteredListings = listings.filter(
+        (listing) => listing.merchant.merchantDetails.area === area
+      );
+      setFilteredListings(filteredListings);
+    }
   }, [area]);
 
   return (
@@ -58,7 +63,17 @@ const Home = () => {
       <h2 className="text-xl font-bold tracking-tight text-indigo-900 mx-auto">
         Listings near you
       </h2>
-      <div className="flex self-end w-1/4">
+      <div className="flex self-end w-1/3">
+        <button
+          type="button"
+          className="mt-2 inline-flex justify-center rounded bg-indigo-100 px-3 py-2 mr-2 text-sm font-semibold shadow-sm hover:bg-indigo-50 w-1/3"
+          onClick={() => {
+            setFilteredListings(listings);
+            setArea("");
+          }}
+        >
+          Show all
+        </button>
         <select
           name="area"
           onChange={handleAreaChange}
@@ -77,7 +92,7 @@ const Home = () => {
         </select>
       </div>
       <div className="w-full">
-        {listings.map((listing, idx) => {
+        {filteredListings.map((listing, idx) => {
           return <Listing listing={listing} key={idx} />;
         })}
       </div>
