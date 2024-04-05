@@ -73,7 +73,8 @@ const CartItem = (props) => {
                 </span>
               </p>
               <p className="mt-1 truncate text-sm font-medium leading-5 text-indigo-700">
-                {props.cartItem.listing.merchant.merchantDetails.name}
+                {props.cartItem.listing.merchant.merchantDetails.name} (
+                {props.cartItem.listing.merchant.merchantDetails.address})
               </p>
             </div>
             <div>

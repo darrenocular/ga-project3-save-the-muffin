@@ -2,7 +2,10 @@ const { Listings, ListingSchema } = require("../models/Listing");
 
 const getAllListings = async (req, res) => {
   try {
-    const listings = await Listings.find().populate("merchant").exec();
+    const listings = await Listings.find()
+      .sort("collectionDate")
+      .populate("merchant")
+      .exec();
 
     res.json(listings);
   } catch (error) {
