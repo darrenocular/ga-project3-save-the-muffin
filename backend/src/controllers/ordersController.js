@@ -55,33 +55,38 @@ const getOrdersByUserId = async (req, res) => {
 };
 
 const addNewOrder = async (req, res) => {
-  //put api
   try {
-    const { user, merchant, listing, purchaseQuantity, totalPrice } = req.body;
+    const { id } = req.body;
+    const cart = await CartItem.findOne({ _id: id });
 
-    // Check if merchant and listing are valid ObjectIds
-    if (
-      !mongoose.Types.ObjectId.isValid(merchant) ||
-      !mongoose.Types.ObjectId.isValid(listing)
-    ) {
+    //check
+    if (!cart) {
       return res
-        .status(400)
-        .json({ status: "error", msg: "Invalid merchant or listing ID" });
+        .status(404)
+        .json({ status: "error", msg: "Cart item not found" });
     }
 
-    // Check if purchaseQuantity is provided
-    if (!purchaseQuantity) {
+    const listingId = cart.listing; //--> find listing
+    const listingsData = await Listings.findOne({
+      _id: listingId,
+    });
+
+    //lising not found check
+    if (!listingsData) {
       return res
-        .status(400)
-        .json({ status: "error", msg: "Purchase quantity is required" });
+        .status(404)
+        .json({ status: "error", msg: "Listing item not found" });
     }
+
+    console.log(listingId);
 
     const newOrder = new Orders({
-      user,
-      merchant,
-      listing,
-      purchaseQuantity,
-      totalPrice,
+      user: cart.user,
+      merchant: listingsData.merchant,
+      listing: listingsData,
+      purchaseQuantity: listingsData.quantity,
+      totalPrice: listingsData.quantity * listingsData.discountedPrice,
+      isCollected: false,
     });
 
     await newOrder.save();
@@ -89,7 +94,7 @@ const addNewOrder = async (req, res) => {
     res.json({
       status: "ok",
       msg: "Order added successfully",
-      order: newOrder,
+      order: [newOrder],
     });
   } catch (error) {
     console.error(error.message);
@@ -111,18 +116,25 @@ const getOrdersByMerchantId = async (req, res) => {
 };
 
 //patch
+
 const updateOrderById = async (req, res) => {
   try {
-    // const orderId = req.params.orderId;
-    const { purchaseQuantity, totalPrice, orderId } = req.body;
-    console.log(orderId);
+    const { id, isCollected } = req.body;
+
+    //check for id
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({ status: "error", msg: "Invalid order ID" });
+    }
+
+    if (isCollected === undefined) {
+      return res
+        .status(400)
+        .json({ status: "error", msg: "Invalid collectedOrNot value" });
+    }
 
     const updatedOrder = await Orders.findByIdAndUpdate(
-      orderId,
-      {
-        purchaseQuantity,
-        totalPrice,
-      },
+      id,
+      { isCollected: isCollected },
       { new: true }
     );
 
@@ -144,7 +156,6 @@ const updateOrderById = async (req, res) => {
 //delete one
 const deleteOrderById = async (req, res) => {
   try {
-    // const orderId = req.params.orderId;
     const { orderId } = req.body;
 
     const deletedOrder = await Orders.findByIdAndDelete(orderId);
