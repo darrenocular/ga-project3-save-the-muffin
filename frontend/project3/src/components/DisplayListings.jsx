@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import styles from "./styles/DisplayListings.module.css";
-import Listing from "./Listing";
+import ListingWrapper from "./ListingWrapper";
 import useFetch from "../hooks/useFetch";
 import AppContext from "../context/AppContext";
 
@@ -27,6 +27,37 @@ const DisplayListings = (props) => {
     }
   };
 
+  const deleteListing = async (id) => {
+    try {
+      const res = await fetchData(
+        "/api/listings",
+        "DELETE",
+        { id },
+        appCtx.accessToken
+      );
+
+      if (res.ok) {
+        const newListings = structuredClone(myListings).filter(
+          (listing) => listing._id !== id
+        );
+        setMyListings(newListings);
+      }
+    } catch (error) {
+      console.error(error.message);
+      appCtx.setErrorMessage(error.message);
+      appCtx.setIsError(true);
+    }
+  };
+
+  const passUpdateListing = (listing) => {
+    if (JSON.stringify(listing) === JSON.stringify(props.selectedListing)) {
+      props.setSelectedListing(null);
+    } else {
+      props.setSelectedListing(listing);
+    }
+    props.setUpdate(!props.update);
+  };
+
   useEffect(() => {
     getListingByMerchant();
   }, []);
@@ -45,7 +76,14 @@ const DisplayListings = (props) => {
       </h2>
       {myListings &&
         myListings.map((listing, idx) => {
-          return <Listing listing={listing} key={idx} />;
+          return (
+            <ListingWrapper
+              listing={listing}
+              key={idx}
+              handleDelete={deleteListing}
+              handleUpdate={passUpdateListing}
+            />
+          );
         })}
     </div>
   );

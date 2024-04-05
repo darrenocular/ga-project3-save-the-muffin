@@ -9,6 +9,7 @@ const ManageListings = () => {
   const [refreshListings, setRefreshListings] = useState(false);
 
   const passListing = () => {
+    setUpdate(false);
     setRefreshListings(true);
   };
   return (
@@ -25,6 +26,8 @@ const ManageListings = () => {
         setSelectedListing={setSelectedListing}
         refreshListings={refreshListings}
         setRefreshListings={setRefreshListings}
+        setUpdate={setUpdate}
+        update={update}
       />
     </div>
   );

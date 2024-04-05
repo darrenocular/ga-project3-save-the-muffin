@@ -12,7 +12,7 @@ const Listing = (props) => {
     <>
       <div
         onClick={() => setViewListing(!viewListing)}
-        className="flex justify-between pr-4 rounded shadow-md my-4 hover:bg-indigo-50"
+        className="flex grow justify-between pr-4 rounded shadow-md my-4 hover:bg-indigo-50"
       >
         <div className="flex min-w-0 gap-x-4">
           <img
