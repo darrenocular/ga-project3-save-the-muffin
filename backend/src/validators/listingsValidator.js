@@ -43,8 +43,9 @@ const validateUpdateListingInput = [
   body("id", "invalid listing id").isMongoId(),
   body("id", "invalid listing id").isLength({ min: 24, max: 24 }),
   body("merchant", "merchant id is required").optional().not().isEmpty(),
-  body("merchant", "invalid merchant id").isMongoId(),
+  body("merchant", "invalid merchant id").optional().isMongoId(),
   body("merchant", "invalid merchant id")
+    .optional()
     .if(body("merchant").not().isEmpty())
     .isLength({ min: 24, max: 24 }),
   body("name", "name is required").optional().not().isEmpty(),
@@ -80,9 +81,16 @@ const validateUpdateListingInput = [
     }),
   body("description", "invalid description").isLength({ min: 0, max: 500 }),
   body("category", "category is required").optional().not().isEmpty(),
-  body("category", "invalid category")
+  body("category")
     .if(body("category").not().isEmpty())
-    .isIn(["asian", "beverages", "western", "dessert", "salad", "pastries"]),
+    .custom(async (value) => {
+      const categories = await ListingSchema.path("category").enumValues;
+      if (categories.includes(value)) {
+        return true;
+      } else {
+        throw new Error("invalid category");
+      }
+    }),
   body("image", "invalid image url").isLength({ min: 0, max: 500 }),
   body("collectionDate", "date/time is required").optional().not().isEmpty(),
   body("collectionDate", "invalid date/time")
