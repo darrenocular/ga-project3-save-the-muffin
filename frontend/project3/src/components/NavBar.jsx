@@ -82,7 +82,7 @@ const NavBar = () => {
             )}
             {appCtx.role === "merchant" && (
               <NavLink
-                to="/orders"
+                to="/manage-orders"
                 className={(navData) =>
                   navData.isActive
                     ? "bg-indigo-900 text-white rounded-md px-3 py-2 text-sm font-medium"
