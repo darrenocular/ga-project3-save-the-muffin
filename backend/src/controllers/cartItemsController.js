@@ -53,7 +53,13 @@ const addCartItem = async (req, res) => {
 const getCartByUserId = async (req, res) => {
   try {
     const cart = await Cart.find({ user: req.body.user })
-      .populate("user listing")
+      .populate([
+        "user",
+        {
+          path: "listing",
+          populate: { path: "merchant", model: "Auth" },
+        },
+      ])
       .exec();
 
     res.json(cart);

@@ -46,18 +46,6 @@ const NavBar = () => {
             </NavLink>
             {appCtx.role === "user" && (
               <NavLink
-                to="/history"
-                className={(navData) =>
-                  navData.isActive
-                    ? "bg-indigo-900 text-white rounded-md px-3 py-2 text-sm font-medium"
-                    : "text-indigo-300 hover:bg-indigo-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium"
-                }
-              >
-                History
-              </NavLink>
-            )}
-            {appCtx.role === "user" && (
-              <NavLink
                 to="/cart"
                 className={(navData) =>
                   navData.isActive
@@ -66,6 +54,18 @@ const NavBar = () => {
                 }
               >
                 Cart
+              </NavLink>
+            )}
+            {appCtx.role === "user" && (
+              <NavLink
+                to="/orders"
+                className={(navData) =>
+                  navData.isActive
+                    ? "bg-indigo-900 text-white rounded-md px-3 py-2 text-sm font-medium"
+                    : "text-indigo-300 hover:bg-indigo-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium"
+                }
+              >
+                Orders
               </NavLink>
             )}
             {appCtx.role === "merchant" && (
@@ -82,7 +82,7 @@ const NavBar = () => {
             )}
             {appCtx.role === "merchant" && (
               <NavLink
-                to="/orders"
+                to="/manage-orders"
                 className={(navData) =>
                   navData.isActive
                     ? "bg-indigo-900 text-white rounded-md px-3 py-2 text-sm font-medium"

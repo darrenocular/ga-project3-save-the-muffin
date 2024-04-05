@@ -24,6 +24,7 @@ const Overlay = (props) => {
 
       if (res.ok) {
         setQuantity(0);
+        props.okayClick();
       } else {
         throw new Error(res.data);
       }
@@ -104,17 +105,21 @@ const Overlay = (props) => {
                   value={quantity}
                   className="w-full rounded-md border-0 text-indigo-900 shadow-sm ring-1 ring-inset ring-indigo-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 text-sm p-2"
                   onChange={handleChangeQuantity}
-                  disabled={!appCtx.accessToken}
+                  disabled={
+                    appCtx.accessToken && appCtx.role === "user" ? false : true
+                  }
                 />
                 <button
                   type="button"
                   className={
-                    appCtx.accessToken
+                    appCtx.accessToken && appCtx.role === "user"
                       ? "inline-flex w-full justify-center rounded-md bg-green-600 ml-2 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-500"
                       : "inline-flex w-full justify-center rounded-md bg-gray-600 ml-2 px-3 py-2 text-sm font-semibold text-white shadow-sm"
                   }
                   onClick={handleAddToCart}
-                  disabled={!appCtx.accessToken}
+                  disabled={
+                    appCtx.accessToken && appCtx.role === "user" ? false : true
+                  }
                 >
                   Add to cart
                 </button>

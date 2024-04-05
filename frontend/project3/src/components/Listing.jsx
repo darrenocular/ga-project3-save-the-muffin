@@ -12,7 +12,7 @@ const Listing = (props) => {
     <>
       <div
         onClick={() => setViewListing(!viewListing)}
-        className="flex justify-between pr-4 rounded shadow-md my-4 hover:bg-indigo-50"
+        className="flex grow justify-between pr-4 rounded shadow-md my-4 hover:bg-indigo-50"
       >
         <div className="flex min-w-0 gap-x-4">
           <img
@@ -33,7 +33,8 @@ const Listing = (props) => {
                 </span>
               </p>
               <p className="mt-1 truncate text-sm font-medium leading-5 text-indigo-700">
-                {props.listing.merchant.merchantDetails.name}
+                {props.listing.merchant.merchantDetails.name} (
+                {props.listing.merchant.merchantDetails.address})
               </p>
             </div>
             <div>
@@ -43,7 +44,7 @@ const Listing = (props) => {
             </div>
           </div>
         </div>
-        <div className="flex flex-col py-4 pr-2 justify-between">
+        <div className="flex flex-col py-4 justify-between w-1/5">
           <div>
             <p className="text-sm leading-6 text-indigo-900 font-semibold">
               Quantity available: {props.listing.quantity}
