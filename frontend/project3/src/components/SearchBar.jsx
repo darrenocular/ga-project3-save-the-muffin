@@ -1,0 +1,101 @@
+import React, { useState, useContext, useEffect } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSearch } from "@fortawesome/free-solid-svg-icons";
+import AppContext from "../context/AppContext";
+import useOneMap from "../hooks/useOneMap";
+
+const SearchBar = (props) => {
+  const fetchOneMapData = useOneMap();
+  const { setErrorMessage, setIsError } = useContext(AppContext);
+  const [searchText, setSearchText] = useState("");
+  const [addressSearchResult, setAddressSearchResult] = useState([]);
+  const [displaySearchResult, setDisplaySearchResult] = useState(false);
+
+  const getAddressBySearch = async (searchTerm) => {
+    try {
+      if (searchTerm.length === 0) return;
+      if (!props.oneMapAccessToken) {
+        throw new Error("cannot search without access to OneMap");
+      }
+      setAddressSearchResult([]);
+      searchTerm = encodeURIComponent(searchTerm);
+      const res = await fetchOneMapData(
+        "/api/common/elastic/search?returnGeom=Y&getAddrDetails=Y&pageNum=1&searchVal=" +
+          searchTerm,
+        "GET",
+        undefined,
+        props.oneMapAccessToken
+      );
+
+      if (res.ok) {
+        if (res.data?.results) {
+          setAddressSearchResult(res.data.results);
+        }
+        setDisplaySearchResult(true);
+        console.log(res.data.results);
+      }
+    } catch (error) {
+      console.error(error.message);
+      setErrorMessage(error.message);
+      setIsError(true);
+    }
+  };
+
+  const handleEnter = (event) => {
+    if (event.key === "Enter") {
+      getAddressBySearch(searchText);
+    }
+  };
+
+  const handleClick = (result) => {
+    props.liftClick(result);
+    setSearchText("");
+    setAddressSearchResult([]);
+  };
+
+  return (
+    <div className="relative z-10">
+      <div className="relative mt-2 rounded-md shadow-sm">
+        <input
+          type="text"
+          name="search"
+          id="search"
+          className="block w-full rounded-md border-0 py-1.5 pl-5 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+          placeholder="Search"
+          value={searchText}
+          onChange={(event) => setSearchText(event.target.value)}
+          onKeyDown={handleEnter}
+        />
+        <button
+          className="absolute inset-y-0 right-3 flex items-center"
+          onClick={() => getAddressBySearch(searchText)}
+        >
+          <FontAwesomeIcon icon={faSearch} className="text-indigo-700" />
+        </button>
+        {displaySearchResult && searchText && (
+          <div className="absolute z-50 bg-white flex flex-col w-full rounded-md ring-1 ring-inset ring-indigo-300">
+            {addressSearchResult && addressSearchResult.length > 0 ? (
+              addressSearchResult.map((result, idx) => {
+                return (
+                  <div
+                    className="text-sm text-indigo-900 block w-full rounded-md p-3 border-0 hover:bg-indigo-100"
+                    key={idx}
+                    onClick={() => handleClick(result)}
+                  >
+                    {result.ADDRESS}
+                  </div>
+                );
+              })
+            ) : (
+              <div className="text-sm text-indigo-900 block w-full rounded-md p-3 border-0 hover:bg-indigo-100">
+                No results found
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default SearchBar;
