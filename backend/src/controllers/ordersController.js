@@ -53,32 +53,33 @@ const getOrdersByUserId = async (req, res) => {
       .json({ status: "error", msg: "error getting orders by user id" });
   }
 };
-
 const addNewOrder = async (req, res) => {
   try {
-    const { id } = req.body;
-    const cart = await CartItem.findOne({ _id: id });
+    const { id } = req.body; //getting cart id
+    const cart = await CartItem.findOne({ _id: id }); //find the cart in the db
 
-    //check
     if (!cart) {
       return res
         .status(404)
         .json({ status: "error", msg: "Cart item not found" });
-    }
+    } //checking if cart exists
 
-    const listingId = cart.listing; //--> find listing
+    const listingId = cart.listing; //find what listingId is attached to this cart
     const listingsData = await Listings.findOne({
       _id: listingId,
-    });
+    }); //find listingId from db
 
-    //lising not found check
     if (!listingsData) {
       return res
         .status(404)
         .json({ status: "error", msg: "Listing item not found" });
-    }
+    } //check if listingId is correct or not
 
-    console.log(listingId);
+    if (listingsData.quantity < cart.cartQuantity) {
+      return res
+        .status(400)
+        .json({ status: "error", msg: "Insufficient stock" }); //checking that stock of item in listing is greater than user's cart item
+    }
 
     const newOrder = new Orders({
       user: cart.user,
@@ -87,20 +88,25 @@ const addNewOrder = async (req, res) => {
       purchaseQuantity: listingsData.quantity,
       totalPrice: listingsData.quantity * listingsData.discountedPrice,
       isCollected: false,
-    });
+    }); //this code block creates the new order
 
-    await newOrder.save();
+    await newOrder.save(); //saving it into the db
+
+    listingsData.quantity -= cart.cartQuantity; //logic for minus the cart item from stock listings
+    await listingsData.save(); //saving to db
+
+    await CartItem.deleteOne({ _id: id }); //delete the checkout logic
 
     res.json({
       status: "ok",
       msg: "Order added successfully",
-      order: [newOrder],
-    });
+      userHistory: newOrder,
+    }); //send the response
   } catch (error) {
     console.error(error.message);
     res.status(400).json({ status: "error", msg: "Failed to add new order" });
   }
-};
+}; //error handling
 
 const getOrdersByMerchantId = async (req, res) => {
   try {
