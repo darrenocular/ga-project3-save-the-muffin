@@ -2,9 +2,12 @@ import React, { useContext, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import useFetch from "../hooks/useFetch";
 import AppContext from "../context/AppContext";
+import useOneMap from "../hooks/useOneMap";
+import SearchBar from "../components/SearchBar";
 
 const Register = () => {
   const fetchData = useFetch();
+  const fetchOneMapData = useOneMap();
   const appCtx = useContext(AppContext);
   const navigate = useNavigate();
 
@@ -20,6 +23,8 @@ const Register = () => {
   const [area, setArea] = useState("");
   const [description, setDescription] = useState("");
   const [image, setImage] = useState("");
+  const [latitude, setLatitude] = useState("");
+  const [longitude, setLongitude] = useState("");
 
   function emailIsValid(email) {
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
@@ -53,6 +58,12 @@ const Register = () => {
       case "image":
         setImage(event.currentTarget.value);
         break;
+      case "latitude":
+        setLatitude(event.currentTarget.value);
+        break;
+      case "longitude":
+        setLongitude(event.currentTarget.value);
+        break;
       default:
         appCtx.setErrorMessage(
           `something went wrong! id: ${event.currentTarget.id}, value: ${event.currentTarget.value}`
@@ -60,6 +71,12 @@ const Register = () => {
         appCtx.isError(true);
         break;
     }
+  };
+
+  const setLocation = (selectedAddress) => {
+    setAddress(selectedAddress.ADDRESS);
+    setLatitude(parseFloat(selectedAddress.LATITUDE));
+    setLongitude(parseFloat(selectedAddress.LONGITUDE));
   };
 
   const getRolesAndAreas = async () => {
@@ -110,6 +127,16 @@ const Register = () => {
       if (accountType === "merchant" && description)
         newUser.description = description;
       if (accountType === "merchant" && image) newUser.image = image;
+      if (accountType === "merchant" && latitude) newUser.latitude = latitude;
+      if (accountType === "merchant" && longitude)
+        newUser.longitude = longitude;
+
+      if (accountType === "merchant" && latitude && longitude) {
+        console.log(typeof latitude);
+        console.log(typeof longitude);
+      }
+
+      console.log(newUser);
 
       const res = await fetchData("/auth/register", "PUT", newUser, undefined);
       if (res.ok) {
@@ -121,6 +148,8 @@ const Register = () => {
         setArea("");
         setDescription("");
         setImage("");
+        setLatitude("");
+        setLongitude("");
         navigate("/");
       } else {
         throw new Error(res.data);
@@ -244,6 +273,60 @@ const Register = () => {
                 </div>
                 <div>
                   <label
+                    htmlFor="search"
+                    className="block text-sm font-medium leading-6 text-indigo-900"
+                  >
+                    Search for the nearest address to your collection point
+                    <span className="text-red-600">*</span>
+                  </label>
+                  <SearchBar liftClick={setLocation} />
+                </div>
+                <div>
+                  <label
+                    htmlFor="latitude"
+                    className="block text-sm font-medium leading-6 text-indigo-900"
+                  >
+                    Latitude
+                    <span className="text-red-600">*</span>
+                    <span className=" pl-5 text-sm text-gray-400">
+                      Set by selected search result
+                    </span>
+                  </label>
+                  <input
+                    id="latitude"
+                    name="latitude"
+                    type="number"
+                    onChange={handleChange}
+                    value={latitude}
+                    className="block w-full rounded-md border-0 py-1.5 text-indigo-900 shadow-sm ring-1 ring-inset ring-indigo-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 mt-2 text-sm p-2"
+                    required
+                    disabled
+                  />
+                </div>
+                <div>
+                  <label
+                    htmlFor="longitude"
+                    className="block text-sm font-medium leading-6 text-indigo-900"
+                  >
+                    Longitude
+                    <span className="text-red-600">*</span>
+                    <span className=" pl-5 text-sm text-gray-400">
+                      Set by selected search result
+                    </span>
+                  </label>
+                  <input
+                    id="longitude"
+                    name="longitude"
+                    type="number"
+                    onChange={handleChange}
+                    value={longitude}
+                    className="block w-full rounded-md border-0 py-1.5 text-indigo-900 shadow-sm ring-1 ring-inset ring-indigo-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 mt-2 text-sm p-2"
+                    required
+                    disabled
+                  />
+                </div>
+                <div>
+                  <label
                     htmlFor="address"
                     className="block text-sm font-medium leading-6 text-indigo-900"
                   >
@@ -253,6 +336,7 @@ const Register = () => {
                     id="address"
                     name="address"
                     type="text"
+                    placeholder="Modify address as required"
                     onChange={handleChange}
                     value={address}
                     className="block w-full rounded-md border-0 py-1.5 text-indigo-900 shadow-sm ring-1 ring-inset ring-indigo-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 mt-2 text-sm p-2"

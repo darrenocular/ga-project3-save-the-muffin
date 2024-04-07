@@ -1,10 +1,11 @@
-import React, { useState, Suspense } from "react";
+import React, { useState, useEffect, Suspense } from "react";
 import AppContext from "./context/AppContext";
 import { Route, Routes } from "react-router-dom";
 import "./App.css";
 import NavBar from "./components/NavBar";
 import ErrorModal from "./components/ErrorModal";
 import ProtectedRoute from "./components/ProtectedRoute";
+import useOneMap from "./hooks/useOneMap";
 
 const Home = React.lazy(() => import("./pages/Home"));
 const Login = React.lazy(() => import("./pages/Login"));
@@ -17,6 +18,7 @@ const MerchantManageOrders = React.lazy(() =>
 );
 
 function App() {
+  const fetchOneMapData = useOneMap();
   const [accessToken, setAccessToken] = useState("");
   const [role, setRole] = useState("");
   const [id, setId] = useState("");
@@ -24,6 +26,7 @@ function App() {
   const [showLogin, setShowLogin] = useState(true);
   const [isError, setIsError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const [oneMapAccessToken, setOneMapAccessToken] = useState("");
 
   const dismissError = () => {
     setIsError(() => !isError);
@@ -39,6 +42,26 @@ function App() {
       localStorage.removeItem("refreshToken");
     }
   };
+
+  const getOneMapToken = async () => {
+    try {
+      const res = await fetchOneMapData("/api/auth/post/getToken", "POST", {
+        email: import.meta.env.VITE_ONE_MAP_EMAIL,
+        password: import.meta.env.VITE_ONE_MAP_PASSWORD,
+      });
+
+      if (res.ok) {
+        setOneMapAccessToken(res.data.access_token);
+      }
+    } catch (error) {
+      setLocationTailoredService(false);
+      throw new Error(error.message + `. Unable to access OneMap.`);
+    }
+  };
+
+  useEffect(() => {
+    getOneMapToken();
+  }, []);
 
   return (
     <Suspense>
@@ -58,6 +81,8 @@ function App() {
           setIsError,
           errorMessage,
           setErrorMessage,
+          oneMapAccessToken,
+          setOneMapAccessToken,
           logOut,
         }}
       >

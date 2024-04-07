@@ -6,6 +6,7 @@ import useOneMap from "../hooks/useOneMap";
 
 const SearchBar = (props) => {
   const fetchOneMapData = useOneMap();
+  const appCtx = useContext(AppContext);
   const { setErrorMessage, setIsError } = useContext(AppContext);
   const [searchText, setSearchText] = useState("");
   const [addressSearchResult, setAddressSearchResult] = useState([]);
@@ -14,7 +15,7 @@ const SearchBar = (props) => {
   const getAddressBySearch = async (searchTerm) => {
     try {
       if (searchTerm.length === 0) return;
-      if (!props.oneMapAccessToken) {
+      if (!appCtx.oneMapAccessToken) {
         throw new Error("cannot search without access to OneMap");
       }
       setAddressSearchResult([]);
@@ -24,7 +25,7 @@ const SearchBar = (props) => {
           searchTerm,
         "GET",
         undefined,
-        props.oneMapAccessToken
+        appCtx.oneMapAccessToken
       );
 
       if (res.ok) {
@@ -32,7 +33,6 @@ const SearchBar = (props) => {
           setAddressSearchResult(res.data.results);
         }
         setDisplaySearchResult(true);
-        console.log(res.data.results);
       }
     } catch (error) {
       console.error(error.message);
@@ -54,14 +54,14 @@ const SearchBar = (props) => {
   };
 
   return (
-    <div className="relative z-10">
+    <div className="relative z-2 grow">
       <div className="relative mt-2 rounded-md shadow-sm">
         <input
           type="text"
           name="search"
           id="search"
-          className="block w-full rounded-md border-0 py-1.5 pl-5 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-          placeholder="Search"
+          className="block w-full rounded-md border-0 py-1.5 pl-5 pr-10 text-gray-900 ring-1 ring-inset ring-indigo-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+          placeholder="Search location"
           value={searchText}
           onChange={(event) => setSearchText(event.target.value)}
           onKeyDown={handleEnter}
@@ -73,7 +73,7 @@ const SearchBar = (props) => {
           <FontAwesomeIcon icon={faSearch} className="text-indigo-700" />
         </button>
         {displaySearchResult && searchText && (
-          <div className="absolute z-50 bg-white flex flex-col w-full rounded-md ring-1 ring-inset ring-indigo-300">
+          <div className="absolute z-10 bg-white flex flex-col w-full rounded-md ring-1 ring-inset ring-indigo-300">
             {addressSearchResult && addressSearchResult.length > 0 ? (
               addressSearchResult.map((result, idx) => {
                 return (

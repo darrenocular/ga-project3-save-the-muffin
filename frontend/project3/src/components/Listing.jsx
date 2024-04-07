@@ -14,16 +14,16 @@ const Listing = (props) => {
         onClick={() => setViewListing(!viewListing)}
         className="flex grow justify-between pr-4 rounded shadow-md my-4 hover:bg-indigo-50"
       >
-        <div className="flex min-w-0 gap-x-4">
+        <div className="flex min-w-0 gap-x-4 w-8/12">
           <img
-            className="h-36 w-36 flex-none bg-gray-50 object-cover rounded-l"
+            className="h-36 w-1/3 flex-none bg-gray-50 object-cover rounded-l"
             src={
               props.listing.image
                 ? props.listing.image
                 : "https://images.unsplash.com/photo-1626645738196-c2a7c87a8f58?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
             }
           />
-          <div className="flex flex-col justify-between py-4">
+          <div className="flex flex-col justify-between w-2/3 py-4">
             <div>
               <p className="text-xl font-semibold leading-6 text-indigo-900 flex">
                 {props.listing.name}{" "}
@@ -44,7 +44,7 @@ const Listing = (props) => {
             </div>
           </div>
         </div>
-        <div className="flex flex-col py-4 justify-between w-1/5">
+        <div className="flex flex-col py-4 justify-between w-3/12">
           <div>
             <p className="text-sm leading-6 text-indigo-900 font-semibold">
               Quantity available: {props.listing.quantity}

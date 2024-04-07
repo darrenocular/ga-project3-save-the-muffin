@@ -24,6 +24,8 @@ const ListingSchema = new mongoose.Schema(
     category: { type: String, enum: foodCategories, required: true },
     image: { type: String },
     collectionDate: { type: Date, required: true },
+    latitude: { type: Number, required: true },
+    longitude: { type: Number, required: true },
   },
   {
     timestamps: true,

@@ -1,5 +1,5 @@
-const { body } = require("express-validator");
-const { AuthSchema } = require("../models/Auth");
+const { body, oneOf } = require("express-validator");
+const { AuthSchema, MerchantSchema } = require("../models/Auth");
 
 const validatePasswordPresent = [
   body("password", "password is required").notEmpty(),
@@ -68,7 +68,44 @@ const validateMerchantRegistration = [
   body("coordinates", "coordinates cannot be empty").optional().notEmpty(),
   body("image", "image cannot be empty").optional().notEmpty(),
   body("image", "image has to be valid URL").optional().isURL(),
+  body("latitude", "latitude is required").notEmpty(),
+  body("latitude", "latitude must be -90 to 90").isNumeric({
+    min: -90,
+    max: 90,
+  }),
+  body("longitude", "longitude is required").notEmpty(),
+  body("longitude", "longitude must be -180 to 180").isNumeric({
+    min: -180,
+    max: 180,
+  }),
 ];
+
+const validateAllRegistration = oneOf(
+  [
+    [
+      // User registration validations
+      ...validateUserRegistration,
+      body("role").custom((value) => {
+        if (value === "merchant") {
+          throw new Error("Invalid role for this registration");
+        }
+        return true;
+      }),
+    ],
+    [
+      // Merchant registration validations
+      ...validateUserRegistration,
+      ...validateMerchantRegistration,
+      body("role").custom((value) => {
+        if (value !== "merchant") {
+          throw new Error("Invalid role for this registration");
+        }
+        return true;
+      }),
+    ],
+  ],
+  "Invalid registration data"
+);
 
 const validatePasswordStrength = [
   body(
@@ -92,4 +129,5 @@ module.exports = {
   validateUserRegistration,
   validateMerchantRegistration,
   validatePasswordStrength,
+  validateAllRegistration,
 };

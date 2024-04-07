@@ -159,6 +159,12 @@ const CreateListing = (props) => {
   const handleSubmit = async (event) => {
     try {
       event.preventDefault();
+      const dateTime = new Date(`${date}T${time}`);
+      console.log(dateTime);
+      if (isNaN(dateTime)) {
+        throw new Error("Invalid Date");
+      }
+
       if (
         !appCtx.id ||
         !name ||
@@ -184,11 +190,6 @@ const CreateListing = (props) => {
         );
       }
 
-      const apptDateTime = new Date(`${date}T${time}`);
-      if (apptDateTime === "Invalid Date") {
-        throw new Error("Invalid Date");
-      }
-
       const listing = {
         merchant: appCtx.id,
         name: name,
@@ -198,7 +199,7 @@ const CreateListing = (props) => {
         description: description,
         category: category,
         image: image,
-        collectionDate: apptDateTime,
+        collectionDate: dateTime,
       };
 
       if (props.update) {
