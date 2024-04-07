@@ -12,6 +12,7 @@ const {
   validatePasswordPresent,
   validateEmailPresent,
   validateRefresh,
+  validateAllRegistration,
   validatePasswordStrength,
 } = require("../validators/authValidator");
 const { validateRegistration } = require("../validators/validateRegistration");
@@ -24,7 +25,9 @@ router.post(
   errorCheck,
   checkPassword
 );
-router.put("/register", validateRegistration, errorCheck, register);
+router.put("/register", validateAllRegistration, errorCheck, register);
+// router.put("/register", register);
+
 router.post(
   "/login",
   validateEmailPresent,

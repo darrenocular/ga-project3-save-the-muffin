@@ -1,4 +1,6 @@
 import React, { useContext, useState, useEffect } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faMapMarkedAlt } from "@fortawesome/free-solid-svg-icons";
 import Listing from "../components/Listing";
 import useFetch from "../hooks/useFetch";
 import AppContext from "../context/AppContext";
@@ -11,13 +13,16 @@ const Home = () => {
   const fetchOneMapData = useOneMap();
   const appCtx = useContext(AppContext);
   const [listings, setListings] = useState([]);
+  const [nearbyListings, setNearbyListings] = useState([]);
+  const [isLocationLoading, setIsLocationLoading] = useState(true);
+  const [isNearbyListingLoading, setIsNearbyListingLoading] = useState(true);
   const [filteredListings, setFilteredListings] = useState([]);
   const [areaList, setAreaList] = useState([]);
   const [area, setArea] = useState("");
   const [longitude, setLongitude] = useState("");
   const [latitude, setLatitude] = useState("");
-  const [oneMapAccessToken, setOneMapAccessToken] = useState("");
-  const [locationTailoredService, setLocationTailoredService] = useState(true);
+  const [tailoredLocationService, settailoredLocationService] = useState(true);
+  const [showMap, setShowMap] = useState(true);
 
   const handleAreaChange = (event) => {
     event.preventDefault();
@@ -25,10 +30,10 @@ const Home = () => {
   };
 
   const setCoordinates = (clickedAddress) => {
-    console.log(clickedAddress);
-    setLongitude(clickedAddress.LONGITUDE);
-    setLatitude(clickedAddress.LATITUDE);
-    setLocationTailoredService(true);
+    setLongitude(parseFloat(clickedAddress.LONGITUDE));
+    setLatitude(parseFloat(clickedAddress.LATITUDE));
+    settailoredLocationService(true);
+    fetchNearbyFood();
   };
 
   const getListings = async () => {
@@ -58,38 +63,42 @@ const Home = () => {
   };
 
   const getLocation = () => {
-    // if (navigator.geolocation) {
-    //   navigator.geolocation.getCurrentPosition(success, error);
-    // } else {
-    //   return "Geolocation not supported";
-    // }
-
     return new Promise((resolve, reject) => {
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
-          (position) => {
-            success(position);
-            setLocationTailoredService(true);
-            resolve();
-          },
-          (err) => {
-            error(err);
-            reject(`Unable to retrieve your location.`);
-          }
-        );
+      setIsLocationLoading(true);
+      try {
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(
+            (position) => {
+              success(position);
+              settailoredLocationService(true);
+              resolve();
+            },
+            (err) => {
+              error(err);
+              reject(`Unable to retrieve your location.`);
+            }
+          );
+        }
+      } catch (error) {
+        console.error(error.message);
+        appCtx.setErrorMessage(error.message);
+        appCtx.setIsError(true);
+      } finally {
+        setIsLocationLoading(false);
       }
     });
   };
 
   const success = (position) => {
-    const latitude = position.coords.latitude;
-    const longitude = position.coords.longitude;
+    const latitude = parseFloat(position.coords.latitude);
+    const longitude = parseFloat(position.coords.longitude);
     setLatitude(latitude);
     setLongitude(longitude);
+    fetchNearbyFood();
   };
 
   const error = (err) => {
-    setLocationTailoredService(false);
+    settailoredLocationService(false);
     throw new Error(err + `. Unable to retrieve your location.`);
   };
 
@@ -101,20 +110,53 @@ const Home = () => {
       });
 
       if (res.ok) {
-        setOneMapAccessToken(res.data.access_token);
+        appCtx.setOneMapAccessToken(res.data.access_token);
       }
     } catch (error) {
-      setLocationTailoredService(false);
+      settailoredLocationService(false);
       throw new Error(error.message + `. Unable to access OneMap.`);
     }
   };
 
   const fetchNearbyFood = async () => {
+    setIsNearbyListingLoading(true);
+    try {
+      if (!latitude && !longitude) {
+        return;
+      }
+      console.log(
+        `fetching nearby food: longitude: ${longitude}, latitude: ${latitude}`
+      );
+      const res = await fetchData(
+        "/api/listings/nearby",
+        "POST",
+        {
+          latitude: latitude,
+          longitude: longitude,
+          maxDistance: 3,
+        },
+        undefined
+      );
+
+      if (res.ok) {
+        setNearbyListings(res.data.listings);
+      }
+    } catch (error) {
+      console.error(error.message);
+      appCtx.setErrorMessage(error.message);
+      appCtx.setIsError(true);
+    } finally {
+      setIsNearbyListingLoading(false);
+    }
+  };
+
+  const loadHomePage = async () => {
     try {
       const listingsAndAreas = Promise.all([getListings(), getAreas()]);
-      await getOneMapToken();
+      if (!appCtx.oneMapAccessToken) await getOneMapToken();
       await listingsAndAreas;
       await getLocation();
+      await fetchNearbyFood();
     } catch (error) {
       console.error(error.message);
       appCtx.setErrorMessage(error.message);
@@ -124,7 +166,7 @@ const Home = () => {
 
   // Get areas list on mount
   useEffect(() => {
-    fetchNearbyFood();
+    loadHomePage();
   }, []);
 
   // Get listings when area changes
@@ -137,18 +179,41 @@ const Home = () => {
     }
   }, [area]);
 
+  useEffect(() => {
+    fetchNearbyFood();
+  }, [latitude, longitude]);
+
   return (
     <div className="mx-auto w-90 px-4 py-4 flex flex-col relative">
-      {/* <div style={{ textWrap: "no-wrap", wordBreak: "break-all" }}>
-        OneMap Access Token: {oneMapAccessToken}
-      </div> */}
-      <SearchBar
-        oneMapAccessToken={oneMapAccessToken}
-        liftClick={setCoordinates}
-      />
-      {locationTailoredService && (
-        <DisplayMap longitude={longitude} latitude={latitude} />
-      )}
+      <div className="flex">
+        <SearchBar liftClick={setCoordinates} />
+        <button
+          className="text-indigo-700 hover:bg-indigo-200 p-2 m-2 rounded-md"
+          onClick={() => setShowMap(!showMap)}
+        >
+          <FontAwesomeIcon icon={faMapMarkedAlt} />
+        </button>
+      </div>
+      {/* <div>isLocationLoading: {JSON.stringify(isLocationLoading)}</div>
+      <div>
+        isNearbyListingLoading: {JSON.stringify(isNearbyListingLoading)}
+      </div>
+      <div>
+        tailoredLocationService: {JSON.stringify(tailoredLocationService)}
+      </div>
+      <div>nearbyListings: {JSON.stringify(nearbyListings)}</div> */}
+
+      {!isLocationLoading &&
+        !isNearbyListingLoading &&
+        showMap &&
+        tailoredLocationService &&
+        nearbyListings.length > 0 && (
+          <DisplayMap
+            longitude={longitude}
+            latitude={latitude}
+            nearbyListings={nearbyListings}
+          />
+        )}
       <h2 className="text-xl font-bold tracking-tight text-indigo-900 mx-auto">
         Listings near you
       </h2>

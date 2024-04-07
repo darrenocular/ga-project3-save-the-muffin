@@ -23,3 +23,5 @@ A MERN app that allows you to purchase unsold food items for value and do your b
 ## Ice Box
 
 ## References
+
+- Calculating distances between two points on the earth: https://stackoverflow.com/questions/639695/how-to-convert-latitude-or-longitude-to-meters

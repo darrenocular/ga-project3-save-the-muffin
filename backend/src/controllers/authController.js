@@ -43,7 +43,7 @@ const register = async (req, res) => {
     const newAccount = {
       email: req.body.email,
       hash,
-      role: req.body.role || "user",
+      accountType: req.body.role || "user",
     };
 
     if (req.body.role === "merchant") {
@@ -52,6 +52,10 @@ const register = async (req, res) => {
       if (req.body.address)
         newAccount.merchantDetails.address = req.body.address;
       if (req.body.area) newAccount.merchantDetails.area = req.body.area;
+      if (req.body.longitude)
+        newAccount.merchantDetails.longitude = req.body.longitude;
+      if (req.body.latitude)
+        newAccount.merchantDetails.latitude = req.body.latitude;
       if (req.body.description)
         newAccount.merchantDetails.description = req.body.description;
       if (req.body.image) newAccount.merchantDetails.image = req.body.image;

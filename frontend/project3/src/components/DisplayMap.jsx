@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import ListingModal from "./ListingModal";
 import {
   MapContainer,
   TileLayer,
@@ -15,6 +16,19 @@ const DisplayMap = (props) => {
     width: window.innerWidth,
     height: window.innerHeight,
   });
+  const [mapCenter, setMapCenter] = useState([props.latitude, props.longitude]);
+  const [listings, setListings] = useState([]);
+  const [viewListingModal, setViewListingModal] = useState(false);
+  const [selectedListing, setSelectedListing] = useState(null);
+
+  const handleDismiss = () => {
+    setViewListingModal(() => !viewListingModal);
+  };
+
+  const handleMarkerClick = (listing) => {
+    setSelectedListing(listing);
+    setViewListingModal(true);
+  };
 
   const handleResize = () => {
     setScreenDimensions({
@@ -33,30 +47,35 @@ const DisplayMap = (props) => {
     const map = useMap();
     useEffect(() => {
       map.invalidateSize();
-    }, [
-      screenDimensions.width,
-      screenDimensions.height,
-      props.longitude,
-      props.latitude,
-    ]);
+    }, [screenDimensions.width, screenDimensions.height]);
     return null;
   };
 
+  const UpdateMapCenter = () => {
+    const map = useMap();
+    useEffect(() => {
+      map.flyTo(mapCenter, map.getZoom());
+    }, [mapCenter]);
+    return null;
+  };
+
+  useEffect(() => {
+    if (props.latitude && props.longitude) {
+      setMapCenter([props.latitude, props.longitude]);
+    }
+  }, [props.latitude, props.longitude]);
+
+  useEffect(() => {
+    if (props.nearbyListings) {
+      setListings(props.nearbyListings);
+    }
+  }, [props.nearbyListings]);
+
   return (
     <div className="block mx-auto w-full py-4 flex flex-col items-center z-0">
-      {/* <h2 className="text-xl font-bold tracking-tight text-indigo-900 mx-auto">
-        Your location
-      </h2>
-       <div>
-        Longitude: {props.longitude}, Latitude: {props.latitude}
-      </div>
-      <div>
-        Width: {screenDimensions.width}, Height: {screenDimensions.height}
-      </div> */}
-
-      {props.latitude && props.longitude && (
+      {mapCenter[0] && mapCenter[1] && (
         <MapContainer
-          center={[props.latitude, props.longitude]}
+          center={mapCenter}
           zoom={15}
           scrollWheelZoom={true}
           className={styles["map-container"]}
@@ -71,14 +90,57 @@ const DisplayMap = (props) => {
             detectRetina={true}
           />
           <AttributionControl position="bottomright" prefix={false} />
-          <Marker position={[props.latitude, props.longitude]}>
-            <Popup>You</Popup>
+          <Marker
+            position={[props.latitude, props.longitude]}
+            eventHandlers={{
+              mouseover: (e) => {
+                e.target.openPopup();
+              },
+              mouseout: (e) => {
+                e.target.closePopup();
+              },
+            }}
+          >
+            <Popup>You are here</Popup>
           </Marker>
-          <Marker position={[props.latitude - 0.001, props.longitude - 0.001]}>
-            <Popup>Food</Popup>
-          </Marker>
+          {listings.length > 0 &&
+            listings.map((listing) => {
+              return (
+                <Marker
+                  position={[listing.latitude, listing.longitude]}
+                  key={listing._id}
+                  data={listing}
+                  eventHandlers={{
+                    click: () => handleMarkerClick(listing),
+                    mouseover: (e) => {
+                      e.target.openPopup();
+                    },
+                    mouseout: (e) => {
+                      e.target.closePopup();
+                    },
+                  }}
+                >
+                  <Popup>
+                    <div className="text-indigo-700 font-semibold">
+                      {listing.name}
+                    </div>
+                    <div className="text-gray-500 text-xs">
+                      {listing.merchant.merchantDetails.name}
+                    </div>
+                    <div className="text-emerald-600 pt-1">
+                      ${listing.discountedPrice.toFixed(2)}
+                    </div>
+                  </Popup>
+                </Marker>
+              );
+            })}
+
           <ResizeMap />
+          <UpdateMapCenter />
         </MapContainer>
+      )}
+      {viewListingModal && (
+        <ListingModal listing={selectedListing} okayClick={handleDismiss} />
       )}
     </div>
   );
