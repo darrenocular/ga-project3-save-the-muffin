@@ -62,9 +62,10 @@ const MerchantSchema = new mongoose.Schema({
   name: { type: String, required: true },
   address: { type: String, required: true },
   area: { type: String, enum: areas, required: true },
-  coordinates: { type: String },
   description: { type: String, required: true },
   image: { type: String },
+  latitude: { type: Number, required: true },
+  longitude: { type: Number, required: true },
 });
 
 const AuthSchema = new mongoose.Schema(

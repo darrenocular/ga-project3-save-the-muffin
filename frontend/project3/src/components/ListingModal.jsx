@@ -41,7 +41,7 @@ const Overlay = (props) => {
 
   return (
     <div
-      className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
+      className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity z-10"
       onClick={props.okayClick}
     >
       <div
@@ -51,7 +51,10 @@ const Overlay = (props) => {
         <div className="flex flex-col min-h-full overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all">
           <img
             className="object-cover rounded-t h-64"
-            src="https://images.unsplash.com/photo-1626645738196-c2a7c87a8f58?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+            src={
+              props.listing.image ||
+              "https://images.unsplash.com/photo-1626645738196-c2a7c87a8f58?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+            }
           />
           <div className="mt-4 bg-white px-4 pb-4">
             <h3

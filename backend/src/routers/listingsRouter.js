@@ -10,6 +10,7 @@ const {
   getListingById,
   getListingsByMerchantId,
   getEnum,
+  getNearbyListings,
 } = require("../controllers/listingsController");
 const {
   validateNewListingInput,
@@ -31,5 +32,6 @@ router.delete("/listings", deleteListingById); // delete a listing
 router.post("/listings", getListingById); // get a listing by listing id
 router.post("/listings/merchant", getListingsByMerchantId); // get listings by merchant id
 router.get("/listings/enum", getEnum); // get enum values
+router.post("/listings/nearby", getNearbyListings); // get nearby listings
 
 module.exports = router;

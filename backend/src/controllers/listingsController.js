@@ -1,4 +1,6 @@
+const { Merchant } = require("../models/Auth");
 const { Listings, ListingSchema } = require("../models/Listing");
+const { Auth } = require("../models/Auth");
 
 const getAllListings = async (req, res) => {
   try {
@@ -30,6 +32,8 @@ const seedListings = async (req, res) => {
         description: "Gluten-free",
         category: "Pastries",
         collectionDate: new Date("2024-04-05T17:00:00"),
+        latitude: 1.27590110812862,
+        longitude: 103.842656784977,
       },
       {
         merchant: "660b73d4f4e248c36c993f2d",
@@ -40,6 +44,8 @@ const seedListings = async (req, res) => {
         description: "Allergy: nuts",
         category: "Pastries",
         collectionDate: new Date("2024-04-05T17:00:00"),
+        latitude: 1.27590110812862,
+        longitude: 103.842656784977,
       },
       {
         merchant: "660b7406f4e248c36c993f2f",
@@ -50,6 +56,8 @@ const seedListings = async (req, res) => {
         description: "Available with or without chilli",
         category: "Asian",
         collectionDate: new Date("2024-04-05T12:00:00"),
+        latitude: 1.34522406568893,
+        longitude: 103.712800680774,
       },
     ]);
     res.json({ status: "ok", msg: "seed success" });
@@ -73,6 +81,8 @@ const getAllCategories = async (req, res) => {
 
 const addNewListing = async (req, res) => {
   try {
+    const merchant = await Auth.findById(req.body.merchant);
+
     const newListing = {
       merchant: req.body.merchant,
       name: req.body.name,
@@ -83,6 +93,8 @@ const addNewListing = async (req, res) => {
       category: req.body.category,
       image: req.body.image || "",
       collectionDate: new Date(req.body.collectionDate),
+      longitude: merchant.merchantDetails.longitude,
+      latitude: merchant.merchantDetails.latitude,
     };
 
     await Listings.create(newListing);
@@ -149,6 +161,47 @@ const getEnum = async (req, res) => {
   }
 };
 
+const getNearbyListings = async (req, res) => {
+  try {
+    // using simplified filter for shops given Singapore's small size
+    // Singapore latitude = 1.3521° N, longitude 103.8198° E (in degrees)
+    // Length in km of 1° of latitude = always 111.32 km
+    // Length in km of 1° of longitude = 40075 km * cos( latitude in radians ) / 360
+    // const KMPerLongitudePerDegreeInSingapore = 40075 * Math.cos( 1.3521 * Math.PI / 180) / 360 = 111.288
+
+    console.log(req.body);
+
+    const KMPerLongitudePerDegreeInSingapore = 111.288;
+    const KMPerLatitudePerDegreeWorldwide = 111.32;
+
+    const perKMLongitude = 1 / 111.288;
+    const perKMLatitude = 1 / 111.32;
+    let defaultMaxDistance = 2;
+
+    const { latitude, longitude, maxDistance = defaultMaxDistance } = req.body;
+
+    const minLat = latitude - maxDistance * perKMLatitude;
+    const maxLat = latitude + maxDistance * perKMLatitude;
+    const minLong = longitude - maxDistance * perKMLongitude;
+    const maxLong = longitude + maxDistance * perKMLongitude;
+
+    const listings = await Listings.find({
+      longitude: { $gte: minLong, $lte: maxLong },
+      latitude: { $gte: minLat, $lte: maxLat },
+    })
+      .populate("merchant")
+      .exec();
+    console.log(listings);
+    const LatDifferenceBetweenTwoPoints = 0;
+    res.json({ listings });
+  } catch (error) {
+    console.error(error.message);
+    res
+      .status(400)
+      .json({ status: "error", msg: "error in getting nearby listings" });
+  }
+};
+
 module.exports = {
   getAllListings,
   addNewListing,
@@ -159,4 +212,5 @@ module.exports = {
   seedListings,
   getListingsByMerchantId,
   getEnum,
+  getNearbyListings,
 };
