@@ -191,8 +191,7 @@ const getNearbyListings = async (req, res) => {
     })
       .populate("merchant")
       .exec();
-    console.log(listings);
-    const LatDifferenceBetweenTwoPoints = 0;
+
     res.json({ listings });
   } catch (error) {
     console.error(error.message);
