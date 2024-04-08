@@ -18,7 +18,7 @@ router.put("/orders", authUser, addNewOrder); // check out user's cart/create ne
 
 // Merchant routes for orders
 router.post("/orders/manage", authMerchant, getOrdersByMerchantId); // get all orders for merchant
-router.patch("/orders/manage", authMerchant, updateOrderById); // merchant to confirm collection of user order
+router.put("/orders/manage", authMerchant, updateOrderById); // merchant to confirm collection of user order
 router.delete("/orders/manage", authMerchant, deleteOrderById); // delete order
 
 module.exports = router;
