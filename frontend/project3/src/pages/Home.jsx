@@ -33,7 +33,6 @@ const Home = () => {
     setLongitude(parseFloat(clickedAddress.LONGITUDE));
     setLatitude(parseFloat(clickedAddress.LATITUDE));
     settailoredLocationService(true);
-    fetchNearbyFood();
   };
 
   const getListings = async () => {
@@ -176,6 +175,7 @@ const Home = () => {
         (listing) => listing.merchant.merchantDetails.area === area
       );
       setFilteredListings(filteredListings);
+      setShowMap(false);
     }
   }, [area]);
 
@@ -183,17 +183,12 @@ const Home = () => {
     fetchNearbyFood();
   }, [latitude, longitude]);
 
+  useEffect(() => {
+    setFilteredListings(nearbyListings);
+  }, [nearbyListings]);
+
   return (
     <div className="mx-auto w-90 px-4 py-4 flex flex-col relative">
-      <div className="flex">
-        <SearchBar liftClick={setCoordinates} />
-        <button
-          className="text-indigo-700 hover:bg-indigo-200 p-2 m-2 rounded-md"
-          onClick={() => setShowMap(!showMap)}
-        >
-          <FontAwesomeIcon icon={faMapMarkedAlt} />
-        </button>
-      </div>
       {/* <div>isLocationLoading: {JSON.stringify(isLocationLoading)}</div>
       <div>
         isNearbyListingLoading: {JSON.stringify(isNearbyListingLoading)}
@@ -202,7 +197,65 @@ const Home = () => {
         tailoredLocationService: {JSON.stringify(tailoredLocationService)}
       </div>
       <div>nearbyListings: {JSON.stringify(nearbyListings)}</div> */}
-
+      <h2 className="text-xl font-bold tracking-tight text-indigo-900 mx-auto">
+        Listings near you
+      </h2>
+      <div className="flex justify-between mt-4">
+        <div className="flex self-end items-center w-1/3">
+          <select
+            name="area"
+            onChange={handleAreaChange}
+            className="block w-full rounded-md border-0 py-2 text-indigo-900 shadow-sm ring-1 ring-inset ring-indigo-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 text-sm p-2"
+            value={area}
+            required
+          >
+            <option value="" disabled>
+              Select area
+            </option>
+            {areaList.map((areaItem) => (
+              <option value={areaItem} key={areaItem}>
+                {areaItem}
+              </option>
+            ))}
+          </select>
+          <button
+            type="button"
+            className="inline-flex justify-center rounded bg-indigo-100 px-3 py-2 ml-2 text-sm font-semibold shadow-sm hover:bg-indigo-50 w-1/3"
+            onClick={() => {
+              setFilteredListings(listings);
+              setArea("");
+              setShowMap(false);
+            }}
+          >
+            Show all
+          </button>
+        </div>
+        <div className="flex items-center w-1/2">
+          <SearchBar
+            liftClick={setCoordinates}
+            setShowMap={setShowMap}
+            setArea={setArea}
+          />
+          <button
+            className="text-indigo-700 hover:bg-indigo-100 px-4 py-2.5 mx-2 rounded"
+            onClick={() => setShowMap(!showMap)}
+          >
+            <FontAwesomeIcon icon={faMapMarkedAlt} />
+          </button>
+          <button
+            type="button"
+            className="inline-flex justify-center rounded bg-indigo-100 px-3 py-2 text-sm font-semibold shadow-sm hover:bg-indigo-50 w-1/5"
+            onClick={async () => {
+              await getLocation();
+              await fetchNearbyFood();
+              setShowMap(true);
+              setArea("");
+            }}
+          >
+            Show nearby
+          </button>
+        </div>
+      </div>
       {!isLocationLoading &&
         !isNearbyListingLoading &&
         showMap &&
@@ -214,42 +267,17 @@ const Home = () => {
             nearbyListings={nearbyListings}
           />
         )}
-      <h2 className="text-xl font-bold tracking-tight text-indigo-900 mx-auto">
-        Listings near you
-      </h2>
-      <div className="flex self-end w-1/3">
-        <button
-          type="button"
-          className="mt-2 inline-flex justify-center rounded bg-indigo-100 px-3 py-2 mr-2 text-sm font-semibold shadow-sm hover:bg-indigo-50 w-1/3"
-          onClick={() => {
-            setFilteredListings(listings);
-            setArea("");
-          }}
-        >
-          Show all
-        </button>
-        <select
-          name="area"
-          onChange={handleAreaChange}
-          className="block w-full rounded-md border-0 py-1.5 text-indigo-900 shadow-sm ring-1 ring-inset ring-indigo-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 mt-2 text-sm p-2"
-          value={area}
-          required
-        >
-          <option value="" disabled>
-            Select area
-          </option>
-          {areaList.map((areaItem) => (
-            <option value={areaItem} key={areaItem}>
-              {areaItem}
-            </option>
-          ))}
-        </select>
-      </div>
-      <div className="w-full">
-        {filteredListings.map((listing, idx) => {
-          return <Listing listing={listing} key={idx} />;
-        })}
-      </div>
+      {filteredListings.length > 0 ? (
+        <div className="w-full">
+          {filteredListings.map((listing, idx) => {
+            return <Listing listing={listing} key={idx} />;
+          })}
+        </div>
+      ) : (
+        <p className="text-base font-bold tracking-tight text-red-900 mx-auto mt-10">
+          No listings found
+        </p>
+      )}
     </div>
   );
 };

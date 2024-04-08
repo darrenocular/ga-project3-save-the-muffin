@@ -51,11 +51,17 @@ const SearchBar = (props) => {
     props.liftClick(result);
     setSearchText("");
     setAddressSearchResult([]);
+    props.setShowMap(true);
   };
 
   return (
-    <div className="relative z-2 grow">
-      <div className="relative mt-2 rounded-md shadow-sm">
+    <div
+      className="relative z-2 grow"
+      onMouseLeave={() => {
+        setDisplaySearchResult(false);
+      }}
+    >
+      <div className="relative rounded-md shadow-sm">
         <input
           type="text"
           name="search"
@@ -87,7 +93,13 @@ const SearchBar = (props) => {
                 );
               })
             ) : (
-              <div className="text-sm text-indigo-900 block w-full rounded-md p-3 border-0 hover:bg-indigo-100">
+              <div
+                className="text-sm text-indigo-900 block w-full rounded-md p-3 border-0 hover:bg-indigo-100"
+                onClick={() => {
+                  setDisplaySearchResult(false);
+                  setSearchText("");
+                }}
+              >
                 No results found
               </div>
             )}

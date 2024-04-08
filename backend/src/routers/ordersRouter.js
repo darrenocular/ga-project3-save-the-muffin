@@ -17,7 +17,7 @@ router.put("/orders", addNewOrder); // check out user's cart/create new orders b
 
 // Merchant routes for orders
 router.post("/orders/manage", getOrdersByMerchantId); // get all orders for merchant
-router.patch("/orders/manage", updateOrderById); // merchant to confirm collection of user order
+router.put("/orders/manage", updateOrderById); // merchant to confirm collection of user order --> changed to put. when used patch, the cors
 router.delete("/orders/manage", deleteOrderById); // delete order
 
 module.exports = router;
