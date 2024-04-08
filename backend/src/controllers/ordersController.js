@@ -53,49 +53,60 @@ const getOrdersByUserId = async (req, res) => {
       .json({ status: "error", msg: "error getting orders by user id" });
   }
 };
-
 const addNewOrder = async (req, res) => {
-  //put api
   try {
-    const { user, merchant, listing, purchaseQuantity, totalPrice } = req.body;
+    const { id } = req.body; //getting cart id
+    const cart = await CartItem.findOne({ _id: id }); //find the cart in the db
 
-    // Check if merchant and listing are valid ObjectIds
-    if (
-      !mongoose.Types.ObjectId.isValid(merchant) ||
-      !mongoose.Types.ObjectId.isValid(listing)
-    ) {
+    if (!cart) {
+      return res
+        .status(404)
+        .json({ status: "error", msg: "Cart item not found" });
+    } //checking if cart exists
+
+    const listingId = cart.listing; //find what listingId is attached to this cart
+    const listingsData = await Listings.findOne({
+      _id: listingId,
+    }); //find listingId from db
+
+    if (!listingsData) {
+      return res
+        .status(404)
+        .json({ status: "error", msg: "Listing item not found" });
+    } //check if listingId is correct or not
+
+    if (listingsData.quantity < cart.cartQuantity) {
       return res
         .status(400)
-        .json({ status: "error", msg: "Invalid merchant or listing ID" });
-    }
-
-    // Check if purchaseQuantity is provided
-    if (!purchaseQuantity) {
-      return res
-        .status(400)
-        .json({ status: "error", msg: "Purchase quantity is required" });
+        .json({ status: "error", msg: "Insufficient stock" }); //checking that stock of item in listing is greater than user's cart item
     }
 
     const newOrder = new Orders({
-      user,
-      merchant,
-      listing,
-      purchaseQuantity,
-      totalPrice,
-    });
+      user: cart.user,
+      merchant: listingsData.merchant,
+      listing: listingsData,
+      purchaseQuantity: listingsData.quantity,
+      totalPrice: listingsData.quantity * listingsData.discountedPrice,
+      isCollected: false,
+    }); //this code block creates the new order
 
-    await newOrder.save();
+    await newOrder.save(); //saving it into the db
+
+    listingsData.quantity -= cart.cartQuantity; //logic for minus the cart item from stock listings
+    await listingsData.save(); //saving to db
+
+    await CartItem.deleteOne({ _id: id }); //delete the checkout logic
 
     res.json({
       status: "ok",
       msg: "Order added successfully",
-      order: newOrder,
-    });
+      userHistory: newOrder,
+    }); //send the response
   } catch (error) {
     console.error(error.message);
     res.status(400).json({ status: "error", msg: "Failed to add new order" });
   }
-};
+}; //error handling
 
 const getOrdersByMerchantId = async (req, res) => {
   try {
@@ -111,18 +122,25 @@ const getOrdersByMerchantId = async (req, res) => {
 };
 
 //patch
+
 const updateOrderById = async (req, res) => {
   try {
-    // const orderId = req.params.orderId;
-    const { purchaseQuantity, totalPrice, orderId } = req.body;
-    console.log(orderId);
+    const { id, isCollected } = req.body;
+
+    //check for id
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({ status: "error", msg: "Invalid order ID" });
+    }
+
+    if (isCollected === undefined) {
+      return res
+        .status(400)
+        .json({ status: "error", msg: "Invalid collectedOrNot value" });
+    }
 
     const updatedOrder = await Orders.findByIdAndUpdate(
-      orderId,
-      {
-        purchaseQuantity,
-        totalPrice,
-      },
+      id,
+      { isCollected: isCollected },
       { new: true }
     );
 
@@ -144,7 +162,6 @@ const updateOrderById = async (req, res) => {
 //delete one
 const deleteOrderById = async (req, res) => {
   try {
-    // const orderId = req.params.orderId;
     const { orderId } = req.body;
 
     const deletedOrder = await Orders.findByIdAndDelete(orderId);
