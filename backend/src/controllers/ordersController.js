@@ -111,7 +111,9 @@ const addNewOrder = async (req, res) => {
 const getOrdersByMerchantId = async (req, res) => {
   try {
     console.log(req.body.id);
-    const orders = await Orders.find({ merchant: req.body.id });
+    const orders = await Orders.find({ merchant: req.body.id })
+      .populate("user")
+      .populate("listing");
     res.json(orders);
   } catch (error) {
     console.error(error.message);
@@ -159,12 +161,11 @@ const updateOrderById = async (req, res) => {
   }
 };
 
-//delete one
 const deleteOrderById = async (req, res) => {
   try {
-    const { orderId } = req.body;
+    const { id } = req.body;
 
-    const deletedOrder = await Orders.findByIdAndDelete(orderId);
+    const deletedOrder = await Orders.findByIdAndDelete(id);
 
     if (!deletedOrder) {
       return res.status(404).json({ status: "error", msg: "Order not found" });

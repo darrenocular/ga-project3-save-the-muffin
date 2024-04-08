@@ -2,6 +2,7 @@ import React, { useContext, useState, useEffect } from "react";
 import CartItem from "../components/CartItem";
 import useFetch from "../hooks/useFetch";
 import AppContext from "../context/AppContext";
+// import { addNewOrder } from "../../../../backend/src/controllers/ordersController";
 
 const Cart = () => {
   const fetchData = useFetch();
@@ -28,7 +29,32 @@ const Cart = () => {
     }
   };
 
-  const handleCheckOut = async () => {};
+  //
+  const handleCheckOut = async () => {
+    try {
+      const res = await fetchData(
+        "/api/orders",
+        "PUT",
+        { id: cart[0]._id },
+        undefined
+      );
+
+      if (res.ok) {
+        getCart();
+      } else {
+        throw new Error(res.data);
+      }
+    } catch (error) {
+      appCtx.setErrorMessage(error.message);
+      appCtx.setIsError(true);
+    }
+    console.log(cart);
+  };
+
+  // Get cart by user id on mount
+  useEffect(() => {
+    getCart();
+  }, []);
 
   const handleClearCart = async () => {
     try {
@@ -48,12 +74,12 @@ const Cart = () => {
       appCtx.setErrorMessage(error.message);
       appCtx.setIsError(true);
     }
-  };
 
-  // Get cart by user id on mount
-  useEffect(() => {
-    getCart();
-  }, []);
+    // Get cart by user id on mount
+    useEffect(() => {
+      getCart();
+    }, []);
+  };
 
   return (
     <div className="mx-auto w-90 px-4 py-4 flex flex-col">
