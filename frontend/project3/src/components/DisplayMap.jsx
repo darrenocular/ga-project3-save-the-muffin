@@ -72,11 +72,11 @@ const DisplayMap = (props) => {
   }, [props.nearbyListings]);
 
   return (
-    <div className="block mx-auto w-full py-4 flex flex-col items-center z-0">
+    <div className="block flex-col w-full py-4 flex mx-auto items-center z-0">
       {mapCenter[0] && mapCenter[1] && (
         <MapContainer
           center={mapCenter}
-          zoom={15}
+          zoom={14}
           scrollWheelZoom={true}
           className={styles["map-container"]}
           attributionControl={false}
