@@ -8,6 +8,7 @@ const {
   deleteCartItem,
   clearUserCart,
 } = require("../controllers/cartItemsController");
+const { authUser, authCartOwner } = require("../middleware/auth");
 const {
   validateUserIdInBody,
   validateCartIdAndQuantityInBody,
@@ -18,24 +19,44 @@ const { errorCheck } = require("../validators/errorCheck");
 router.get("/cart/seed", seedCart); // seed cart by user id
 router.put(
   "/cart",
+  authUser,
+  authCartOwner,
   validateUserIdInBody,
   validateListingIdAndQuantityInBody,
   errorCheck,
   addCartItem
 ); // add cart item
-router.post("/cart", validateUserIdInBody, errorCheck, getCartByUserId); // get user's cart items
+router.post(
+  "/cart",
+  authUser,
+  authCartOwner,
+  validateUserIdInBody,
+  errorCheck,
+  getCartByUserId
+); // get user's cart items
 router.patch(
   "/cart",
+  authUser,
+  authCartOwner,
   validateCartIdAndQuantityInBody,
   errorCheck,
   updateCartItem
 ); // update user's cart item
 router.delete(
   "/cart",
+  authUser,
+  authCartOwner,
   validateCartIdAndQuantityInBody,
   errorCheck,
   deleteCartItem
 ); // delete user's cart item
-router.delete("/cart/all", validateUserIdInBody, errorCheck, clearUserCart); // clear user cart
+router.delete(
+  "/cart/all",
+  authUser,
+  authCartOwner,
+  validateUserIdInBody,
+  errorCheck,
+  clearUserCart
+); // clear user cart
 
 module.exports = router;

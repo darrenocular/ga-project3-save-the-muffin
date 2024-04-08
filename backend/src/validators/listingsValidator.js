@@ -98,4 +98,21 @@ const validateUpdateListingInput = [
     .isISO8601(),
 ];
 
-module.exports = { validateNewListingInput, validateUpdateListingInput };
+const validateBodyId = [
+  body("id", "listing id is required").not().isEmpty(),
+  body("id", "invalid listing id").isMongoId(),
+  body("id", "invalid listing id").isLength({ min: 24, max: 24 }),
+];
+
+const validateBodyMerchant = [
+  body("merchant", "listing id is required").not().isEmpty(),
+  body("merchant", "invalid listing id").isMongoId(),
+  body("merchant", "invalid listing id").isLength({ min: 24, max: 24 }),
+];
+
+module.exports = {
+  validateNewListingInput,
+  validateUpdateListingInput,
+  validateBodyId,
+  validateBodyMerchant,
+};
