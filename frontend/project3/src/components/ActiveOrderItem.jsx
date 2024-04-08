@@ -1,6 +1,6 @@
 import React from "react";
 
-const OrderItem = (props) => {
+const ActiveOrderItem = (props) => {
   return (
     <>
       <div className="flex justify-between pr-4 rounded shadow-md my-4">
@@ -54,4 +54,4 @@ const OrderItem = (props) => {
   );
 };
 
-export default OrderItem;
+export default ActiveOrderItem;
