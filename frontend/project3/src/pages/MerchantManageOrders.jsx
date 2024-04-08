@@ -6,65 +6,39 @@ export default function MerchantManageOrders() {
   const fetchData = useFetch();
   const appCtx = useContext(AppContext);
 
-  //temporary. delete when merchant exists in db.
-  const orderListings = [
-    {
-      _id: "123",
-      user: {
-        email: "xyz.com",
-      },
-      listing: {
-        name: "someone",
-      },
-      purchaseQuantity: 76,
-      isCollected: false,
-    },
-    {
-      _id: "1234",
-      user: {
-        email: "xyz.com",
-      },
-      listing: {
-        name: "someone",
-      },
-      purchaseQuantity: 76,
-      isCollected: false,
-    },
-  ];
-
-  // const [orderListings, setOrderListing] = useState([]);
+  const [orderListings, setOrderListing] = useState([]);
 
   //this is a get merchant orders list
+  const getListingByMerchant = async () => {
+    try {
+      const res = await fetchData(
+        "/api/orders/manage",
+        "POST",
+        { id: appCtx.id },
+        undefined
+      );
 
-  // const getListingByMerchant = async () => {
-  //   try {
-  //     const res = await fetchData(
-  //       "/api/orders/manage",
-  //       "POST",
-  //       { id: appCtx.id },
-  //       undefined
-  //     );
+      setOrderListing(res.data);
+    } catch (error) {
+      appCtx.setErrorMessage(error.message);
+      appCtx.setIsError(true);
+    }
+  };
 
-  //     setOrderListing(res.data);
-  //   } catch (error) {
-  //     appCtx.setErrorMessage(error.message);
-  //     appCtx.setIsError(true);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   getListingByMerchant();
-  // }, []);
+  useEffect(() => {
+    getListingByMerchant();
+  }, []);
 
   //isCollected put api logic
   const handleOrderCollected = async (order) => {
     try {
       const res = await fetchData(
         "/api/orders/manage",
-        "PATCH",
+        "PUT",
         { id: order._id, isCollected: true },
-        undefined
+        appCtx.accessToken
       );
+      getListingByMerchant();
 
       console.log(res);
     } catch (error) {
@@ -82,8 +56,8 @@ export default function MerchantManageOrders() {
         { id: order._id },
         undefined
       );
-
       console.log(res);
+      getListingByMerchant();
     } catch (error) {
       appCtx.setErrorMessage(error.message);
       appCtx.setIsError(true);
