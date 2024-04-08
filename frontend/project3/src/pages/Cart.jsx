@@ -32,23 +32,19 @@ const Cart = () => {
   //
   const handleCheckOut = async () => {
     try {
-      const res = await fetchData(
-        "/api/orders",
-        "PUT",
-        { id: cart[0]._id },
-        undefined
-      );
-
-      if (res.ok) {
-        getCart();
-      } else {
-        throw new Error(res.data);
+      for (let i = 0; i < cart.length; i++) {
+        const res = await fetchData(
+          "/api/orders",
+          "PUT",
+          { id: cart[i]._id },
+          appCtx.accessToken
+        );
       }
+      getCart();
     } catch (error) {
       appCtx.setErrorMessage(error.message);
       appCtx.setIsError(true);
     }
-    console.log(cart);
   };
 
   // Get cart by user id on mount
@@ -74,11 +70,6 @@ const Cart = () => {
       appCtx.setErrorMessage(error.message);
       appCtx.setIsError(true);
     }
-
-    // Get cart by user id on mount
-    useEffect(() => {
-      getCart();
-    }, []);
   };
 
   return (
