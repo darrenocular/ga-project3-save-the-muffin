@@ -42,9 +42,12 @@ const seedOrders = async (req, res) => {
 
 const getOrdersByUserId = async (req, res) => {
   try {
-    const orders = await Orders.find({ user: req.body.id }).sort({
-      "listing.collectionDate": -1,
-    });
+    const orders = await Orders.find({ user: req.body.id })
+      .sort({
+        "listing.collectionDate": -1,
+      })
+      .populate("listing merchant")
+      .exec();
     res.json(orders);
   } catch (error) {
     console.error(error.message);
@@ -53,10 +56,11 @@ const getOrdersByUserId = async (req, res) => {
       .json({ status: "error", msg: "error getting orders by user id" });
   }
 };
+
 const addNewOrder = async (req, res) => {
   try {
     const { id } = req.body; //getting cart id
-    const cart = await CartItem.findOne({ _id: id }); //find the cart in the db
+    const cart = await CartItem.findOne({ _id: id }).populate("user").exec(); //find the cart in the db
 
     if (!cart) {
       return res
@@ -67,7 +71,9 @@ const addNewOrder = async (req, res) => {
     const listingId = cart.listing; //find what listingId is attached to this cart
     const listingsData = await Listings.findOne({
       _id: listingId,
-    }); //find listingId from db
+    })
+      .populate("merchant")
+      .exec(); //find listingId from db
 
     if (!listingsData) {
       return res
@@ -83,11 +89,10 @@ const addNewOrder = async (req, res) => {
 
     const newOrder = new Orders({
       user: cart.user,
-      merchant: listingsData.merchant,
+      merchant: listingsData.merchant._id,
       listing: listingsData,
-      purchaseQuantity: listingsData.quantity,
-      totalPrice: listingsData.quantity * listingsData.discountedPrice,
-      isCollected: false,
+      purchaseQuantity: cart.cartQuantity,
+      totalPrice: cart.cartQuantity * listingsData.discountedPrice,
     }); //this code block creates the new order
 
     await newOrder.save(); //saving it into the db
@@ -100,7 +105,7 @@ const addNewOrder = async (req, res) => {
     res.json({
       status: "ok",
       msg: "Order added successfully",
-      userHistory: newOrder,
+      newOrder,
     }); //send the response
   } catch (error) {
     console.error(error.message);
@@ -112,8 +117,8 @@ const getOrdersByMerchantId = async (req, res) => {
   try {
     console.log(req.body.id);
     const orders = await Orders.find({ merchant: req.body.id })
-      .populate("user")
-      .populate("listing");
+      .populate("user listing")
+      .exec();
     res.json(orders);
   } catch (error) {
     console.error(error.message);
