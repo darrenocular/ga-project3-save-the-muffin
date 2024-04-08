@@ -38,7 +38,7 @@ const PastOrderItem = (props) => {
             Unit price: S${props.order.listing.discountedPrice.toFixed(2)}
           </p>
           <p className="text-sm leading-6 text-indigo-900 font-semibold">
-            Total price: S${props.order.totalPrice}
+            Total price: S${props.order.totalPrice.toFixed(2)}
           </p>
           <p className="text-sm leading-6 text-indigo-900 font-semibold">
             Status: <span className="text-green-700">Collected</span>
