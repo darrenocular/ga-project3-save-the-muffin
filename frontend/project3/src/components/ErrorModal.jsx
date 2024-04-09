@@ -4,7 +4,10 @@ import styles from "./styles/Modal.module.css";
 
 const Overlay = (props) => {
   return (
-    <div className={styles.backdrop} onClick={props.okayClick}>
+    <div
+      className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity z-20"
+      onClick={props.okayClick}
+    >
       <div
         className={`${styles.board} ${styles.modal}`}
         onClick={(event) => event.stopPropagation()}
