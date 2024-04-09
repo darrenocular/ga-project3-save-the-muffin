@@ -3,9 +3,12 @@ import CartItem from "../components/CartItem";
 import useFetch from "../hooks/useFetch";
 import AppContext from "../context/AppContext";
 // import { addNewOrder } from "../../../../backend/src/controllers/ordersController";
+import { useNavigate } from "react-router-dom";
 
 const Cart = () => {
   const fetchData = useFetch();
+  const navigate = useNavigate();
+
   const appCtx = useContext(AppContext);
   const [cart, setCart] = useState([]);
   const [itemsToCheckOut, setItemsToCheckOut] = useState([]);
@@ -43,6 +46,7 @@ const Cart = () => {
         );
       }
       getCart();
+      navigate("/orders");
     } catch (error) {
       appCtx.setErrorMessage(error.message);
       appCtx.setIsError(true);
