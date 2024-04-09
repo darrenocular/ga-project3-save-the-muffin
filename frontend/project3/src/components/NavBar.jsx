@@ -1,6 +1,7 @@
 import React, { useContext, useEffect } from "react";
 import { NavLink } from "react-router-dom";
 import AppContext from "../context/AppContext";
+import Logo from "../assets/logo.png";
 
 const NavBar = () => {
   const appCtx = useContext(AppContext);
@@ -18,11 +19,7 @@ const NavBar = () => {
       <nav className="bg-indigo-800 navbar flex items-center justify-between">
         <div className="flex flex-1 items-center justify-start">
           <div className="flex flex-shrink-0 items-center">
-            <img
-              className="h-8 w-auto mx-4"
-              src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
-              alt="Save The Muffin"
-            />
+            <img className="h-8 w-auto mx-4" src={Logo} alt="Save The Muffin" />
           </div>
           <div className="flex space-x-4">
             <NavLink
