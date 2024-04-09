@@ -4,7 +4,7 @@ import useFetch from "../hooks/useFetch";
 import AppContext from "../context/AppContext";
 
 const Overlay = (props) => {
-  const [quantity, setQuantity] = useState(0);
+  const [quantity, setQuantity] = useState(1);
   const fetchData = useFetch();
   const appCtx = useContext(AppContext);
 
@@ -45,12 +45,12 @@ const Overlay = (props) => {
       onClick={props.okayClick}
     >
       <div
-        className="mt-20 z-10 w-4/5 mx-auto overflow-y-auto"
+        className="mt-20 z-10 w-3/5 mx-auto overflow-y-auto"
         onClick={(event) => event.stopPropagation()}
       >
         <div className="flex flex-col min-h-full overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all">
           <img
-            className="object-cover rounded-t h-64"
+            className="object-cover rounded-t h-96"
             src={
               props.listing.image ||
               "https://images.unsplash.com/photo-1626645738196-c2a7c87a8f58?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
@@ -96,17 +96,17 @@ const Overlay = (props) => {
                 {new Date(props.listing.collectionDate).toLocaleString("en-SG")}
               </p>
             </div>
-            <div className="w-1/4 py-2">
+            <div className="w-1/5 py-2 flex flex-col justify-end">
               <form className="flex justify-between">
                 <input
                   type="number"
                   id="quantity"
                   name="quantity"
                   placeholder="Quantity"
-                  min="0"
+                  min="1"
                   max={props.listing.quantity}
                   value={quantity}
-                  className="w-full rounded-md border-0 text-indigo-900 shadow-sm ring-1 ring-inset ring-indigo-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 text-sm p-2"
+                  className="w-1/2 rounded-md border-0 text-indigo-900 shadow-sm ring-1 ring-inset ring-indigo-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 text-sm p-2"
                   onChange={handleChangeQuantity}
                   disabled={
                     appCtx.accessToken && appCtx.role === "user" ? false : true
@@ -127,13 +127,6 @@ const Overlay = (props) => {
                   Add to cart
                 </button>
               </form>
-              <button
-                type="button"
-                className="mt-3 inline-flex w-full justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500"
-                onClick={props.okayClick}
-              >
-                Cancel
-              </button>
             </div>
           </div>
         </div>
