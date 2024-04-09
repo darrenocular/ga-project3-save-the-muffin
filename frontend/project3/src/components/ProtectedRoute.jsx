@@ -83,7 +83,7 @@ const ProtectedRoute = (props) => {
   }, []);
 
   useEffect(() => {
-    let timer = setInterval(
+    const timer = setInterval(
       checkAndRefreshToken,
       appCtx.expirationDate - Date.now() - 30 * 1000
     );
