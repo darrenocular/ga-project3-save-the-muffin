@@ -102,9 +102,9 @@ const authMerchantOrder = async (req, res, next) => {
     if (!order) {
       next();
     }
-    console.log(order.merchant.toString());
-    console.log(req.decoded.id);
-    console.log(order.merchant.toString() === req.decoded.id);
+    // console.log(order.merchant.toString());
+    // console.log(req.decoded.id);
+    // console.log(order.merchant.toString() === req.decoded.id);
 
     if (order.merchant.toString() !== req.decoded.id) {
       return res.status(403).json({ status: "error", msg: "unauthorized" });

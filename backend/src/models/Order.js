@@ -9,16 +9,15 @@ const OrderSchema = new mongoose.Schema(
       ref: "Auth",
       required: true,
     },
-    listing:
-      //  {
-      //   type: ListingSchema,
-      //   required: true,
-      // },
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Listing",
-        required: true,
-      },
+    listing: {
+      type: ListingSchema,
+      required: true,
+    },
+    // {
+    //   type: mongoose.Schema.Types.ObjectId,
+    //   ref: "Listing",
+    //   required: true,
+    // },
     purchaseQuantity: { type: Number, required: true },
     isCollected: { type: Boolean, default: false },
     totalPrice: {
