@@ -95,16 +95,16 @@ const authListingOwner = async (req, res, next) => {
   next();
 };
 
-const authMerchantOrder = async (req, res, next) => {
+const authMerchantOrderOwner = async (req, res, next) => {
   if (req.body.id) {
     const order = await Order.findById(req.body.id);
 
     if (!order) {
       next();
     }
-    // console.log(order.merchant.toString());
-    // console.log(req.decoded.id);
-    // console.log(order.merchant.toString() === req.decoded.id);
+    console.log(order.merchant.toString());
+    console.log(req.decoded.id);
+    console.log(order.merchant.toString() === req.decoded.id);
 
     if (order.merchant.toString() !== req.decoded.id) {
       return res.status(403).json({ status: "error", msg: "unauthorized" });
@@ -119,10 +119,35 @@ const authMerchantOrder = async (req, res, next) => {
   next();
 };
 
+const authUserOrderOwner = async (req, res, next) => {
+  if (req.body.id) {
+    const order = await Order.findById(req.body.id);
+
+    if (!order) {
+      next();
+    }
+    console.log(order.user.toString());
+    console.log(req.decoded.id);
+    console.log(order.user.toString() === req.decoded.id);
+
+    if (order.user.toString() !== req.decoded.id) {
+      return res.status(403).json({ status: "error", msg: "unauthorized" });
+    }
+  }
+
+  if (req.body.user) {
+    if (req.body.user !== req.decoded.id) {
+      return res.status(403).json({ status: "error", msg: "unauthorized" });
+    }
+  }
+  next();
+};
+
 module.exports = {
   authUser,
   authMerchant,
   authCartOwner,
   authListingOwner,
-  authMerchantOrder,
+  authMerchantOrderOwner,
+  authUserOrderOwner,
 };

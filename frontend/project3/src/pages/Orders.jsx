@@ -17,7 +17,7 @@ const Orders = () => {
       const res = await fetchData(
         "/api/orders",
         "POST",
-        { id: appCtx.id },
+        { user: appCtx.id },
         appCtx.accessToken
       );
 

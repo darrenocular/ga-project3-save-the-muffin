@@ -14,7 +14,7 @@ export default function MerchantManageOrders() {
       const res = await fetchData(
         "/api/orders/manage",
         "POST",
-        { id: appCtx.id },
+        { merchant: appCtx.id },
         appCtx.accessToken
       );
 
@@ -56,7 +56,7 @@ export default function MerchantManageOrders() {
         "/api/orders/manage",
         "DELETE",
         { id: order._id },
-        undefined
+        appCtx.accessToken
       );
       console.log(res);
       getOrdersByMerchant();
