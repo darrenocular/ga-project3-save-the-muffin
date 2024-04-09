@@ -126,7 +126,7 @@ const refresh = async (req, res) => {
     });
     res.json({ access });
   } catch (error) {
-    console.log(error.message);
+    console.error(error.message);
     res.status(400).json({ status: "error", msg: "refreshing token failed" });
   }
 };

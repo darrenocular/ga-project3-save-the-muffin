@@ -14,7 +14,7 @@ const Register = () => {
   const [roles, setRoles] = useState([]);
   const [areaList, setAreaList] = useState([]);
   const [duplicateEmailWarning, setDuplicateEmailWarning] = useState(false);
-
+  const [clearSearchText, setClearSearchText] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [accountType, setAccountType] = useState("");
@@ -279,7 +279,11 @@ const Register = () => {
                     Search for the nearest address to your collection point
                     <span className="text-red-600">*</span>
                   </label>
-                  <SearchBar liftClick={setLocation} />
+                  <SearchBar
+                    liftClick={setLocation}
+                    clearSearchText={clearSearchText}
+                    setClearSearchText={setClearSearchText}
+                  />
                 </div>
                 <div>
                   <label

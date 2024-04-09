@@ -15,7 +15,6 @@ const {
   validateAllRegistration,
   validatePasswordStrength,
 } = require("../validators/authValidator");
-const { validateRegistration } = require("../validators/validateRegistration");
 const { errorCheck } = require("../validators/errorCheck");
 
 router.post("/check-email", checkDuplicateEmail);

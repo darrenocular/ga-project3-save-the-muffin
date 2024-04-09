@@ -17,12 +17,13 @@ const Orders = () => {
       const res = await fetchData(
         "/api/orders",
         "POST",
-        { id: appCtx.id },
+        { user: appCtx.id },
         appCtx.accessToken
       );
 
       if (res.ok) {
         setOrders(res.data);
+        console.log(res.data);
       }
     } catch (error) {
       appCtx.setErrorMessage(res.data);
@@ -37,8 +38,22 @@ const Orders = () => {
 
   // Set active and past orders on change to orders
   useEffect(() => {
-    setActiveOrders(orders.filter((order) => order.isCollected === false));
-    setPastOrders(orders.filter((order) => order.isCollected === true));
+    setActiveOrders(
+      orders
+        .filter(
+          (order) =>
+            order.isCollected === false &&
+            new Date(order.listing.collectionDate) > Date.now()
+        )
+        .reverse()
+    );
+    setPastOrders(
+      orders.filter(
+        (order) =>
+          order.isCollected === true ||
+          new Date(order.listing.collectionDate) < Date.now()
+      )
+    );
   }, [orders]);
 
   return (
