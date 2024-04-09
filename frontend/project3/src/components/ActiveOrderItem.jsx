@@ -4,15 +4,15 @@ const ActiveOrderItem = (props) => {
   return (
     <>
       <div className="flex justify-between pr-4 rounded shadow-md my-4">
-        <div className="flex min-w-0 gap-x-4">
+        <div className="flex min-w-0 gap-x-4 w-5/6">
           <img
-            className="h-36 w-36 flex-none bg-gray-50 object-cover rounded-l"
+            className="h-40 w-40 flex-none bg-gray-50 object-cover rounded-l"
             src={
               props.order.listing.image ||
               "https://images.unsplash.com/photo-1626645738196-c2a7c87a8f58?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
             }
           />
-          <div className="flex flex-col justify-between py-4 w-5/6 pr-4">
+          <div className="flex flex-col justify-between py-4 w-3/4 pr-4">
             <div>
               <p className="text-xl font-semibold leading-6 text-indigo-900 flex">
                 {props.order.listing.name}{" "}
@@ -21,7 +21,7 @@ const ActiveOrderItem = (props) => {
                     props.order.listing.category.slice(1)}
                 </span>
               </p>
-              <p className="mt-1 truncate text-sm font-medium leading-5 text-indigo-700">
+              <p className="mt-1 text-sm font-medium leading-5 text-indigo-700">
                 {props.order.merchant.merchantDetails.name} (
                 {props.order.merchant.merchantDetails.address})
               </p>
