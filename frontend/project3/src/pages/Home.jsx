@@ -200,7 +200,7 @@ const Home = () => {
         Listings near you
       </h2>
       <div className="flex justify-between mt-4">
-        <div className="flex self-end items-center w-1/3">
+        <div className="flex items-center w-1/3">
           <select
             name="area"
             onChange={handleAreaChange}

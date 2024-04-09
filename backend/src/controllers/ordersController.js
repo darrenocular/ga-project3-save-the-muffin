@@ -71,9 +71,10 @@ const addNewOrder = async (req, res) => {
     const listingId = cart.listing; //find what listingId is attached to this cart
     const listingsData = await Listings.findOne({
       _id: listingId,
-    })
-      .populate("merchant")
-      .exec(); //find listingId from db
+    });
+    console.log(listingsData);
+    // .populate("merchant")
+    // .exec(); //find listingId from db
 
     if (!listingsData) {
       return res
@@ -95,8 +96,9 @@ const addNewOrder = async (req, res) => {
       totalPrice: cart.cartQuantity * listingsData.discountedPrice,
     }); //this code block creates the new order
 
-    await newOrder.save(); //saving it into the db
-
+    const order = await newOrder.save(); //saving it into the db
+    console.log("new order");
+    console.log(order);
     listingsData.quantity -= cart.cartQuantity; //logic for minus the cart item from stock listings
     await listingsData.save(); //saving to db
 
@@ -115,12 +117,10 @@ const addNewOrder = async (req, res) => {
 
 const getOrdersByMerchantId = async (req, res) => {
   try {
-    console.log(req.body.id);
     const orders = await Orders.find({
       merchant: req.body.id,
-      isCollected: false,
     })
-      .populate("user listing")
+      .populate("user")
       .exec();
     res.json(orders);
   } catch (error) {

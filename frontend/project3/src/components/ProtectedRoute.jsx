@@ -90,7 +90,7 @@ const ProtectedRoute = (props) => {
 
   // if no access token is provided when accessing the children page or refresh token expired, immediately redirect user to login.
   // else if above useEffect determines that account role !== required role, navigate to home page
-  if (!appCtx.accessToken || appCtx.showLogin) {
+  if ((!appCtx.accessToken || appCtx.showLogin) && props.requiredRole) {
     return <Navigate to="/login" replace />;
   } else if (shouldNavigate) {
     return <Navigate to="/" replace />;
