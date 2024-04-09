@@ -9,13 +9,13 @@ export default function MerchantManageOrders() {
   const [orderListings, setOrderListing] = useState([]);
 
   //this is a get merchant orders list
-  const getListingByMerchant = async () => {
+  const getOrdersByMerchant = async () => {
     try {
       const res = await fetchData(
         "/api/orders/manage",
         "POST",
         { id: appCtx.id },
-        undefined
+        appCtx.accessToken
       );
 
       setOrderListing(res.data);
@@ -26,7 +26,7 @@ export default function MerchantManageOrders() {
   };
 
   useEffect(() => {
-    getListingByMerchant();
+    getOrdersByMerchant();
   }, []);
 
   //isCollected put api logic
@@ -38,9 +38,11 @@ export default function MerchantManageOrders() {
         { id: order._id, isCollected: true },
         appCtx.accessToken
       );
-      getListingByMerchant();
 
       console.log(res);
+      if (res.ok) {
+        getOrdersByMerchant();
+      }
     } catch (error) {
       appCtx.setErrorMessage(error.message);
       appCtx.setIsError(true);
@@ -57,7 +59,7 @@ export default function MerchantManageOrders() {
         undefined
       );
       console.log(res);
-      getListingByMerchant();
+      getOrdersByMerchant();
     } catch (error) {
       appCtx.setErrorMessage(error.message);
       appCtx.setIsError(true);
@@ -78,6 +80,12 @@ export default function MerchantManageOrders() {
                       className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6"
                     >
                       User
+                    </th>
+                    <th
+                      scope="col"
+                      className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                    >
+                      Order #
                     </th>
                     <th
                       scope="col"
@@ -104,6 +112,9 @@ export default function MerchantManageOrders() {
                     <tr key={order._id}>
                       <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">
                         {order.user.email}
+                      </td>
+                      <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                        {order._id}
                       </td>
                       <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                         {order.listing.name}

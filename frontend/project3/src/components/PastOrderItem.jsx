@@ -7,7 +7,10 @@ const PastOrderItem = (props) => {
         <div className="flex min-w-0 gap-x-4">
           <img
             className="h-36 w-36 flex-none bg-gray-50 object-cover rounded-l"
-            src="https://images.unsplash.com/photo-1626645738196-c2a7c87a8f58?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+            src={
+              props.order.listing.image ||
+              "https://images.unsplash.com/photo-1626645738196-c2a7c87a8f58?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+            }
           />
           <div className="flex flex-col justify-between py-4">
             <div>

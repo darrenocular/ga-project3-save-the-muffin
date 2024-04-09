@@ -116,7 +116,10 @@ const addNewOrder = async (req, res) => {
 const getOrdersByMerchantId = async (req, res) => {
   try {
     console.log(req.body.id);
-    const orders = await Orders.find({ merchant: req.body.id })
+    const orders = await Orders.find({
+      merchant: req.body.id,
+      isCollected: false,
+    })
       .populate("user listing")
       .exec();
     res.json(orders);
