@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useContext } from "react";
-import styles from "./styles/DisplayListings.module.css";
 import ListingWrapper from "./ListingWrapper";
 import useFetch from "../hooks/useFetch";
 import AppContext from "../context/AppContext";
