@@ -122,45 +122,45 @@ const CartItem = (props) => {
               Quantity available: {props.cartItem.listing.quantity}
             </p>
           </div>
-          <div>
-            <p className="text-sm leading-6 text-indigo-900 font-semibold mb-1.5">
-              Quantity in cart: {props.cartItem.cartQuantity}
-            </p>
-            <form className="flex justify-between">
-              {isUpdating && (
-                <input
-                  type="number"
-                  id="cartQuantity"
-                  name="cartQuantity"
-                  placeholder="Quantity"
-                  min="0"
-                  max={props.cartItem.listing.quantity}
-                  value={cartQuantity}
-                  className="w-2/3 rounded-md border-0 text-indigo-900 shadow-sm ring-1 ring-inset ring-indigo-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 text-sm p-2 mr-2"
-                  onChange={handleChangeCartQuantity}
-                />
-              )}
-              <button
-                type="button"
-                className="inline-flex w-full justify-center rounded-md bg-orange-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-orange-500"
-                onClick={
-                  isUpdating
-                    ? handleUpdateCartQuantity
-                    : () => setIsUpdating(true)
-                }
-              >
-                {isUpdating ? "Confirm" : "Update"}
-              </button>
-              <button
-                type="button"
-                className="inline-flex w-full justify-center rounded-md bg-red-600 ml-2 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500"
-                onClick={
-                  isUpdating ? () => setIsUpdating(false) : handleDeleteCartItem
-                }
-              >
-                {isUpdating ? "Cancel" : "Delete"}
-              </button>
-            </form>
+          <p className="text-sm leading-6 text-indigo-900 font-semibold mb-1.5">
+            Quantity in cart:{" "}
+            {isUpdating ? (
+              <input
+                type="number"
+                id="cartQuantity"
+                name="cartQuantity"
+                placeholder="Quantity"
+                min="0"
+                max={props.cartItem.listing.quantity}
+                value={cartQuantity}
+                className=" inline-block rounded-md border-0 text-indigo-900 shadow-sm ring-1 ring-inset ring-indigo-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 text-sm p-2 mr-2"
+                onChange={handleChangeCartQuantity}
+              />
+            ) : (
+              props.cartItem.cartQuantity
+            )}
+          </p>
+          <div className="flex justify-between">
+            <button
+              type="button"
+              className="inline-flex w-full justify-center rounded-md bg-orange-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-orange-500"
+              onClick={
+                isUpdating
+                  ? handleUpdateCartQuantity
+                  : () => setIsUpdating(true)
+              }
+            >
+              {isUpdating ? "Confirm" : "Update"}
+            </button>
+            <button
+              type="button"
+              className="inline-flex w-full justify-center rounded-md bg-red-600 ml-2 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500"
+              onClick={
+                isUpdating ? () => setIsUpdating(false) : handleDeleteCartItem
+              }
+            >
+              {isUpdating ? "Cancel" : "Delete"}
+            </button>
           </div>
         </div>
       </div>

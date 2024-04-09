@@ -46,7 +46,7 @@ const getOrdersByUserId = async (req, res) => {
       .sort({
         "listing.collectionDate": -1,
       })
-      .populate("listing merchant")
+      .populate("merchant")
       .exec();
     res.json(orders);
   } catch (error) {
