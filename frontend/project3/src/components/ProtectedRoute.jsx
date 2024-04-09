@@ -82,6 +82,17 @@ const ProtectedRoute = (props) => {
     checkAndRefreshToken();
   }, []);
 
+  useEffect(() => {
+    const timer = setInterval(
+      checkAndRefreshToken,
+      appCtx.expirationDate - Date.now() - 30 * 1000
+    );
+
+    return () => {
+      clearInterval(timer);
+    };
+  }, [appCtx.expirationDate]);
+
   useEffect(() => {}, [appCtx.showLogin]);
 
   if (isLoading) {
