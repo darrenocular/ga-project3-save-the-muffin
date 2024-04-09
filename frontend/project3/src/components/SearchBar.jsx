@@ -9,6 +9,7 @@ const SearchBar = (props) => {
   const appCtx = useContext(AppContext);
   const { setErrorMessage, setIsError } = useContext(AppContext);
   const [searchText, setSearchText] = useState("");
+  const [isFocused, setIsFocused] = useState(false);
   const [addressSearchResult, setAddressSearchResult] = useState([]);
   const [displaySearchResult, setDisplaySearchResult] = useState(false);
 
@@ -42,8 +43,10 @@ const SearchBar = (props) => {
   };
 
   const handleEnter = (event) => {
-    props.setArea("");
-    if (event.key === "Enter") {
+    if (event.key === "Enter" && isFocused) {
+      if (props.setArea) {
+        props.setArea("");
+      }
       getAddressBySearch(searchText);
     }
   };
@@ -53,7 +56,9 @@ const SearchBar = (props) => {
     setSearchText(result.SEARCHVAL);
     setDisplaySearchResult(false);
     setAddressSearchResult([]);
-    props.setShowMap(true);
+    if (props.setShowMap) {
+      props.setShowMap(true);
+    }
   };
 
   useEffect(() => {
@@ -83,6 +88,8 @@ const SearchBar = (props) => {
           onClick={(event) => event.target.select()}
           onChange={(event) => setSearchText(event.target.value)}
           onKeyDown={handleEnter}
+          onFocus={() => setIsFocused(true)}
+          onBlur={() => setIsFocused(false)}
         />
         <button
           className="absolute inset-y-0 right-3 flex items-center"
