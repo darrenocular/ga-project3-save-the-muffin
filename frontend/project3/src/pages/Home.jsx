@@ -21,8 +21,9 @@ const Home = () => {
   const [area, setArea] = useState("");
   const [longitude, setLongitude] = useState("");
   const [latitude, setLatitude] = useState("");
-  const [tailoredLocationService, settailoredLocationService] = useState(true);
+  const [tailoredLocationService, setTailoredLocationService] = useState(true);
   const [showMap, setShowMap] = useState(true);
+  const [clearSearchText, setClearSearchText] = useState(false);
 
   const handleAreaChange = (event) => {
     event.preventDefault();
@@ -32,7 +33,7 @@ const Home = () => {
   const setCoordinates = (clickedAddress) => {
     setLongitude(parseFloat(clickedAddress.LONGITUDE));
     setLatitude(parseFloat(clickedAddress.LATITUDE));
-    settailoredLocationService(true);
+    setTailoredLocationService(true);
   };
 
   const getListings = async () => {
@@ -69,7 +70,7 @@ const Home = () => {
           navigator.geolocation.getCurrentPosition(
             (position) => {
               success(position);
-              settailoredLocationService(true);
+              setTailoredLocationService(true);
               resolve();
             },
             (err) => {
@@ -93,11 +94,10 @@ const Home = () => {
     const longitude = parseFloat(position.coords.longitude);
     setLatitude(latitude);
     setLongitude(longitude);
-    fetchNearbyFood();
   };
 
   const error = (err) => {
-    settailoredLocationService(false);
+    setTailoredLocationService(false);
     throw new Error(err + `. Unable to retrieve your location.`);
   };
 
@@ -112,7 +112,7 @@ const Home = () => {
         appCtx.setOneMapAccessToken(res.data.access_token);
       }
     } catch (error) {
-      settailoredLocationService(false);
+      setTailoredLocationService(false);
       throw new Error(error.message + `. Unable to access OneMap.`);
     }
   };
@@ -155,7 +155,6 @@ const Home = () => {
       if (!appCtx.oneMapAccessToken) await getOneMapToken();
       await listingsAndAreas;
       await getLocation();
-      await fetchNearbyFood();
     } catch (error) {
       console.error(error.message);
       appCtx.setErrorMessage(error.message);
@@ -205,6 +204,7 @@ const Home = () => {
           <select
             name="area"
             onChange={handleAreaChange}
+            onClick={() => setTailoredLocationService(false)}
             className="block w-full rounded-md border-0 py-2 text-indigo-900 shadow-sm ring-1 ring-inset ring-indigo-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 text-sm p-2"
             value={area}
             required
@@ -225,6 +225,8 @@ const Home = () => {
               setFilteredListings(listings);
               setArea("");
               setShowMap(false);
+              setClearSearchText(true);
+              setTailoredLocationService(false);
             }}
           >
             Show all
@@ -235,6 +237,9 @@ const Home = () => {
             liftClick={setCoordinates}
             setShowMap={setShowMap}
             setArea={setArea}
+            area={area}
+            clearSearchText={clearSearchText}
+            setClearSearchText={setClearSearchText}
           />
           <button
             className="text-indigo-700 hover:bg-indigo-100 px-4 py-2.5 mx-2 rounded"
@@ -247,9 +252,9 @@ const Home = () => {
             className="inline-flex justify-center rounded bg-indigo-100 px-3 py-2 text-sm font-semibold shadow-sm hover:bg-indigo-50 w-1/5"
             onClick={async () => {
               await getLocation();
-              await fetchNearbyFood();
               setShowMap(true);
               setArea("");
+              setClearSearchText(true);
             }}
           >
             Show nearby
@@ -259,8 +264,7 @@ const Home = () => {
       {!isLocationLoading &&
         !isNearbyListingLoading &&
         showMap &&
-        tailoredLocationService &&
-        nearbyListings.length > 0 && (
+        tailoredLocationService && (
           <DisplayMap
             longitude={longitude}
             latitude={latitude}
@@ -274,7 +278,7 @@ const Home = () => {
           })}
         </div>
       ) : (
-        <p className="text-base font-bold tracking-tight text-red-900 mx-auto mt-10">
+        <p className="text-base font-bold tracking-tight text-red-900 mx-auto mt-4">
           No listings found
         </p>
       )}

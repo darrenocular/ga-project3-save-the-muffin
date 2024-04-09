@@ -42,6 +42,7 @@ const SearchBar = (props) => {
   };
 
   const handleEnter = (event) => {
+    props.setArea("");
     if (event.key === "Enter") {
       getAddressBySearch(searchText);
     }
@@ -49,10 +50,20 @@ const SearchBar = (props) => {
 
   const handleClick = (result) => {
     props.liftClick(result);
-    setSearchText("");
+    setSearchText(result.SEARCHVAL);
+    setDisplaySearchResult(false);
     setAddressSearchResult([]);
     props.setShowMap(true);
   };
+
+  useEffect(() => {
+    setSearchText("");
+  }, [props.area]);
+
+  useEffect(() => {
+    if (props.clearSearchText) setSearchText("");
+    props.setClearSearchText(false);
+  }, [props.clearSearchText]);
 
   return (
     <div
@@ -69,6 +80,7 @@ const SearchBar = (props) => {
           className="block w-full rounded-md border-0 py-1.5 pl-5 pr-10 text-gray-900 ring-1 ring-inset ring-indigo-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
           placeholder="Search location"
           value={searchText}
+          onClick={(event) => event.target.select()}
           onChange={(event) => setSearchText(event.target.value)}
           onKeyDown={handleEnter}
         />
