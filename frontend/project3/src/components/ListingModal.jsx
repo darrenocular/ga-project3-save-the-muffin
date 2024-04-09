@@ -96,7 +96,7 @@ const Overlay = (props) => {
                 {new Date(props.listing.collectionDate).toLocaleString("en-SG")}
               </p>
             </div>
-            <div className="w-1/5 py-2 flex flex-col justify-end">
+            <div className="w-1/4 py-2 flex flex-col justify-end">
               <form className="flex justify-between">
                 <input
                   type="number"
