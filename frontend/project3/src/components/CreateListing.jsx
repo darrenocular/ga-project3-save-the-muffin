@@ -255,7 +255,7 @@ const CreateListing = (props) => {
 
   return (
     <>
-      <form className="overflow-y-auto p-3">
+      <form className="w-5/12 overflow-y-auto p-3">
         <div className="space-y-12">
           <div className="border-b border-gray-900/10 pb-12">
             <h2 className="text-base font-semibold leading-7 text-gray-900">

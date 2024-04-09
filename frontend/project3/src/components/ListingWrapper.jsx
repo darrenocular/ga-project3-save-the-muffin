@@ -18,7 +18,7 @@ const ListingWrapper = (props) => {
     <div
       onMouseEnter={() => setIsHover(true)}
       onMouseLeave={() => setIsHover(false)}
-      className="flex"
+      className="flex h-50"
     >
       <Listing listing={props.listing} />
       <div className={isHover ? "flex flex-col justify-around" : "hidden"}>

@@ -14,7 +14,7 @@ const Listing = (props) => {
         onClick={() => setViewListing(!viewListing)}
         className="flex grow justify-between pr-4 rounded shadow-md my-4 hover:bg-indigo-50"
       >
-        <div className="flex min-w-0 gap-x-4 w-5/6">
+        <div className="flex min-w-0 gap-x-4 w-5/6 h-40">
           <img
             className="h-40 w-40 w-1/3 flex-none bg-gray-50 object-cover rounded-l"
             src={
@@ -25,20 +25,20 @@ const Listing = (props) => {
           />
           <div className="flex flex-col justify-between w-3/4 py-4">
             <div>
-              <p className="text-xl font-semibold leading-6 text-indigo-900 flex">
+              <p className="text-xl font-semibold leading-6 text-indigo-900 flex truncate">
                 {props.listing.name}{" "}
                 <span className="text-xs bg-indigo-700 text-white rounded py-1 px-2 ml-2 border-none">
                   {props.listing.category.charAt(0).toUpperCase() +
                     props.listing.category.slice(1)}
                 </span>
               </p>
-              <p className="mt-1 text-sm font-medium leading-5 text-indigo-700">
+              <p className="mt-1 text-sm font-medium leading-5 text-indigo-700 truncate">
                 {props.listing.merchant.merchantDetails.name} (
                 {props.listing.merchant.merchantDetails.address})
               </p>
             </div>
             <div>
-              <p className="mt-1 truncate text-xs font-light leading-5 text-indigo-700">
+              <p className="mt-1 text-ellipsis text-xs font-light leading-5 text-indigo-700 max-h-5 overflow-y-hidden">
                 {props.listing.description || "No description"}
               </p>
             </div>
@@ -47,7 +47,10 @@ const Listing = (props) => {
         <div className="flex flex-col py-4 justify-between w-1/6">
           <div>
             <p className="text-sm leading-6 text-indigo-900 font-semibold">
-              Quantity available: {props.listing.quantity}
+              Remaining:{" "}
+              {props.listing.quantity > 1
+                ? props.listing.quantity + "pcs"
+                : props.listing.quantity + "pc"}
             </p>
             <p className="mt-1 text-sm leading-5 text-gray-400">
               <s>S${props.listing.originalPrice.toFixed(2)}</s>{" "}

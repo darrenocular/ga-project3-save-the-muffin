@@ -37,6 +37,7 @@ const Cart = () => {
   //
   const handleCheckOut = async () => {
     try {
+      appCtx.setErrorMessage("");
       for (let i = 0; i < itemsToCheckOut.length; i++) {
         const res = await fetchData(
           "/api/orders",
@@ -44,6 +45,16 @@ const Cart = () => {
           { id: itemsToCheckOut[i]._id },
           appCtx.accessToken
         );
+        console.log(res);
+        if (!res.ok) {
+          appCtx.setErrorMessage((prev) => [
+            ...prev,
+            `${itemsToCheckOut[i].listing.name} by ${itemsToCheckOut[i].listing.merchant.merchantDetails.name}: ${res.data}. `,
+          ]);
+        }
+      }
+      if (appCtx.errorMessage) {
+        appCtx.setIsError(true);
       }
       getCart();
       navigate("/orders");

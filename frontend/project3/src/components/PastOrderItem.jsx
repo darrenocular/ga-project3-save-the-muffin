@@ -3,7 +3,14 @@ import React from "react";
 const PastOrderItem = (props) => {
   return (
     <>
-      <div className="flex justify-between pr-4 rounded shadow-md my-4">
+      <div
+        className={
+          !props.order.isCollected &&
+          new Date(props.order.listing.collectionDate) < Date.now()
+            ? `flex justify-between pr-4 rounded shadow-md my-4 grayscale-[70%]`
+            : `flex justify-between pr-4 rounded shadow-md my-4`
+        }
+      >
         <div className="flex min-w-0 gap-x-4 w-5/6">
           <img
             className="h-40 w-40 flex-none bg-gray-50 object-cover rounded-l"
@@ -44,7 +51,12 @@ const PastOrderItem = (props) => {
             Total price: S${props.order.totalPrice.toFixed(2)}
           </p>
           <p className="text-sm leading-6 text-indigo-900 font-semibold">
-            Status: <span className="text-green-700">Collected</span>
+            Status:{" "}
+            {props.order.isCollected ? (
+              <span className="text-green-700">Collected</span>
+            ) : (
+              <span className="text-yellow-600">Not Collected</span>
+            )}
           </p>
         </div>
       </div>

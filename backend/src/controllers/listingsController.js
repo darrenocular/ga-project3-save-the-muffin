@@ -1,4 +1,3 @@
-const { Merchant } = require("../models/Auth");
 const { Listings, ListingSchema } = require("../models/Listing");
 const { Auth } = require("../models/Auth");
 
@@ -168,8 +167,6 @@ const getNearbyListings = async (req, res) => {
     // Length in km of 1° of latitude = always 111.32 km
     // Length in km of 1° of longitude = 40075 km * cos( latitude in radians ) / 360
     // const KMPerLongitudePerDegreeInSingapore = 40075 * Math.cos( 1.3521 * Math.PI / 180) / 360 = 111.288
-
-    console.log(req.body);
 
     const KMPerLongitudePerDegreeInSingapore = 111.288;
     const KMPerLatitudePerDegreeWorldwide = 111.32;
