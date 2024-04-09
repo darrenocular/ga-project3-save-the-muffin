@@ -8,6 +8,7 @@ const Cart = () => {
   const fetchData = useFetch();
   const appCtx = useContext(AppContext);
   const [cart, setCart] = useState([]);
+  const [itemsToCheckOut, setItemsToCheckOut] = useState([]);
 
   const getCart = async () => {
     try {
@@ -20,6 +21,7 @@ const Cart = () => {
 
       if (res.ok) {
         setCart(res.data);
+        setItemsToCheckOut(res.data);
       } else {
         throw new Error(res.data);
       }
@@ -32,11 +34,11 @@ const Cart = () => {
   //
   const handleCheckOut = async () => {
     try {
-      for (let i = 0; i < cart.length; i++) {
+      for (let i = 0; i < itemsToCheckOut.length; i++) {
         const res = await fetchData(
           "/api/orders",
           "PUT",
-          { id: cart[i]._id },
+          { id: itemsToCheckOut[i]._id },
           appCtx.accessToken
         );
       }
@@ -72,6 +74,18 @@ const Cart = () => {
     }
   };
 
+  const addItemToCheckOut = (item) => {
+    setItemsToCheckOut((prev) => {
+      return [...prev, item];
+    });
+  };
+
+  const removeItemToCheckOut = (item) => {
+    setItemsToCheckOut((prev) => {
+      return prev.filter((elem) => elem !== item);
+    });
+  };
+
   return (
     <div className="mx-auto w-90 px-4 py-4 flex flex-col">
       <h2 className="text-xl font-bold tracking-tight text-indigo-900 mx-auto">
@@ -79,7 +93,15 @@ const Cart = () => {
       </h2>
       <div className="w-full">
         {cart.map((cartItem, idx) => {
-          return <CartItem cartItem={cartItem} key={idx} getCart={getCart} />;
+          return (
+            <CartItem
+              cartItem={cartItem}
+              key={idx}
+              getCart={getCart}
+              addItemToCheckOut={addItemToCheckOut}
+              removeItemToCheckOut={removeItemToCheckOut}
+            />
+          );
         })}
       </div>
       <div className="flex justify-center mt-4">

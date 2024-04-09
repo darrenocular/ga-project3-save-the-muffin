@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import useFetch from "../hooks/useFetch";
 import AppContext from "../context/AppContext";
 
@@ -7,6 +7,7 @@ const CartItem = (props) => {
   const appCtx = useContext(AppContext);
   const [cartQuantity, setCartQuantity] = useState(props.cartItem.cartQuantity);
   const [isUpdating, setIsUpdating] = useState(false);
+  const [isChecked, setIsChecked] = useState(true);
 
   const handleUpdateCartQuantity = async (event) => {
     try {
@@ -55,9 +56,25 @@ const CartItem = (props) => {
     setCartQuantity(event.target.value);
   };
 
+  const toggleChecked = () => {
+    if (!isChecked) {
+      setIsChecked(true);
+      props.addItemToCheckOut(props.cartItem);
+    } else {
+      setIsChecked(false);
+      props.removeItemToCheckOut(props.cartItem);
+    }
+  };
+
   return (
-    <>
-      <div className="flex justify-between pr-4 rounded shadow-md my-4">
+    <div className="flex justify-between items-center">
+      <input
+        type="checkbox"
+        className="w-6 h-6 mr-4"
+        checked={isChecked}
+        onChange={toggleChecked}
+      ></input>
+      <div className="flex justify-between pr-4 rounded shadow-md my-4 w-full">
         <div className="flex min-w-0 gap-x-4 w-3/4">
           <img
             className="h-40 w-40 flex-none bg-gray-50 object-cover rounded-l"
@@ -99,7 +116,7 @@ const CartItem = (props) => {
             </div>
           </div>
         </div>
-        <div className="flex flex-col py-4 pr-2 justify-between w-1/4">
+        <div className="flex flex-col py-4 pr-2 justify-between w-1/5">
           <div>
             <p className="text-sm leading-6 text-indigo-900 font-semibold">
               Quantity available: {props.cartItem.listing.quantity}
@@ -147,7 +164,7 @@ const CartItem = (props) => {
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 
