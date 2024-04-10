@@ -36,6 +36,44 @@ export default function MerchantHistoryOrders() {
     getOrdersByMerchant();
   }, []);
 
+<<<<<<< Updated upstream
+=======
+  //isCollected put api logic
+  const handleOrderCollected = async (order) => {
+    try {
+      const res = await fetchData(
+        "/api/orders/manage",
+        "PUT",
+        { id: order._id, isCollected: true },
+        appCtx.accessToken
+      );
+
+      if (res.ok) {
+        getOrdersByMerchant();
+      }
+    } catch (error) {
+      appCtx.setErrorMessage(error.message);
+      appCtx.setIsError(true);
+    }
+  };
+
+  // //delete order
+  const handleOrderDelete = async (order) => {
+    try {
+      const res = await fetchData(
+        "/api/orders/manage",
+        "DELETE",
+        { id: order._id },
+        appCtx.accessToken
+      );
+      getOrdersByMerchant();
+    } catch (error) {
+      appCtx.setErrorMessage(error.message);
+      appCtx.setIsError(true);
+    }
+  };
+
+>>>>>>> Stashed changes
   return (
     <div className="px-4 sm:px-6 lg:px-8">
       <div className="mt-8 flow-root">
