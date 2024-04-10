@@ -74,8 +74,6 @@ export default function MerchantActiveOrders() {
     }
   };
 
-  console.log("active", orderListings);
-
   return (
     <div className="px-4 sm:px-6 lg:px-8">
       <div className="mt-8 flow-root">
@@ -124,7 +122,7 @@ export default function MerchantActiveOrders() {
                       orderListings
                         .filter((e) => e.isCollected === false)
                         .map((order) => (
-                          <tr key={order._id}>
+                          <tr key={order._id} className="hover:bg-indigo-50">
                             <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">
                               {order.user.email}
                             </td>
@@ -166,8 +164,7 @@ export default function MerchantActiveOrders() {
                             No active orders yet...
                           </p>
                           <button
-                            style={{ width: "12%", marginTop: "0.5rem" }}
-                            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-full"
+                            className="bg-blue-500 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded"
                             onClick={() => navigate("/listings")}
                           >
                             Go to listings
@@ -177,7 +174,12 @@ export default function MerchantActiveOrders() {
                     )
                   ) : (
                     <tr>
-                      <td className="p-5">Loading...</td>
+                      <td
+                        colSpan="5"
+                        className="p-5 text-gray-500 text-center text-sm leading-6"
+                      >
+                        Loading...
+                      </td>
                     </tr>
                   )}
                 </tbody>

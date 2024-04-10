@@ -6,6 +6,7 @@ import NavBar from "./components/NavBar";
 import ErrorModal from "./components/ErrorModal";
 import ProtectedRoute from "./components/ProtectedRoute";
 import useOneMap from "./hooks/useOneMap";
+import Spinner from "./components/Spinner";
 
 const Home = React.lazy(() => import("./pages/Home"));
 const Login = React.lazy(() => import("./pages/Login"));
@@ -66,7 +67,7 @@ function App() {
   }, []);
 
   return (
-    <Suspense>
+    <Suspense fallback={<Spinner />}>
       <AppContext.Provider
         value={{
           accessToken,

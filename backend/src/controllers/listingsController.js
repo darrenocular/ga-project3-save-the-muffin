@@ -174,8 +174,8 @@ const getNearbyListings = async (req, res) => {
     const KMPerLongitudePerDegreeInSingapore = 111.288;
     const KMPerLatitudePerDegreeWorldwide = 111.32;
 
-    const perKMLongitude = 1 / 111.288;
-    const perKMLatitude = 1 / 111.32;
+    const perKMLongitude = 1 / KMPerLongitudePerDegreeInSingapore;
+    const perKMLatitude = 1 / KMPerLatitudePerDegreeWorldwide;
     let defaultMaxDistance = 2;
 
     const { latitude, longitude, maxDistance = defaultMaxDistance } = req.body;
@@ -188,6 +188,8 @@ const getNearbyListings = async (req, res) => {
     const listings = await Listings.find({
       longitude: { $gte: minLong, $lte: maxLong },
       latitude: { $gte: minLat, $lte: maxLat },
+      collectionDate: { $gt: Date.now() },
+      quantity: { $gt: 0 },
     })
       .populate("merchant")
       .exec();
