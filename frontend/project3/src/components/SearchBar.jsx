@@ -36,7 +36,6 @@ const SearchBar = (props) => {
         setDisplaySearchResult(true);
       }
     } catch (error) {
-      console.error(error.message);
       setErrorMessage(error.message);
       setIsError(true);
     }

@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import Listing from "./Listing";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPenToSquare, faX } from "@fortawesome/free-solid-svg-icons";
 
@@ -44,7 +43,7 @@ const ListingWrapper = (props) => {
             </p>
           </div>
           <div>
-            <p className="mt-1 text-xs font-light leading-5 text-indigo-700 max-h-12 overflow-auto">
+            <p className="mt-1 text-xs font-light leading-5 text-indigo-700 line-clamp-3">
               {props.listing.description || "No description"}
             </p>
           </div>

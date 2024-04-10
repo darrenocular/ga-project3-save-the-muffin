@@ -47,7 +47,6 @@ export default function MerchantActiveOrders() {
         appCtx.accessToken
       );
 
-      console.log(res);
       if (res.ok) {
         getOrdersByMerchant();
       }
@@ -66,7 +65,6 @@ export default function MerchantActiveOrders() {
         { id: order._id },
         appCtx.accessToken
       );
-      console.log(res);
       getOrdersByMerchant();
     } catch (error) {
       appCtx.setErrorMessage(error.message);

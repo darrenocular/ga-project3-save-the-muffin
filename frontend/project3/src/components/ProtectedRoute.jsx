@@ -14,7 +14,6 @@ const ProtectedRoute = (props) => {
     try {
       const refreshToken = localStorage.getItem("refreshToken");
       if (refreshToken) {
-        console.log("found refresh token");
         const res = await fetchData("/auth/refresh", "POST", {
           refresh: refreshToken,
         });
@@ -30,18 +29,15 @@ const ProtectedRoute = (props) => {
           return true;
         } else {
           // log out and redirect to login because refresh token has expired
-          console.log("refresh failed, redirecting to login.");
           appCtx.logOut();
           appCtx.setShowLogin(true);
         }
       } else {
         // log out because no refresh token was found
-        console.log("no refresh token");
         appCtx.logOut();
         appCtx.setShowLogin(true);
       }
     } catch (error) {
-      console.error(error.message);
       appCtx.logOut();
     }
   };
@@ -51,7 +47,6 @@ const ProtectedRoute = (props) => {
       (appCtx.expirationDate && appCtx.expirationDate < Date.now()) ||
       (localStorage.getItem("refreshToken") && !appCtx.accessToken)
     ) {
-      console.log("refreshing token");
       const refreshed = await refreshAccessToken();
       if (!refreshed) {
         appCtx.setShowLogin(true);

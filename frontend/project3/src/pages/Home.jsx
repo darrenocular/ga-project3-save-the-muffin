@@ -84,7 +84,6 @@ const Home = () => {
           );
         }
       } catch (error) {
-        console.error(error.message);
         appCtx.setErrorMessage(error.message);
         appCtx.setIsError(true);
       } finally {
@@ -129,9 +128,6 @@ const Home = () => {
       if (!latitude && !longitude) {
         return;
       }
-      console.log(
-        `fetching nearby food: longitude: ${longitude}, latitude: ${latitude}`
-      );
       const res = await fetchData(
         "/api/listings/nearby",
         "POST",
@@ -147,7 +143,6 @@ const Home = () => {
         setNearbyListings(res.data.listings);
       }
     } catch (error) {
-      console.error(error.message);
       appCtx.setErrorMessage(error.message);
       appCtx.setIsError(true);
     } finally {
@@ -162,7 +157,6 @@ const Home = () => {
       await listingsAndAreas;
       await getLocation();
     } catch (error) {
-      console.error(error.message);
       appCtx.setErrorMessage(error.message);
       appCtx.setIsError(true);
     }
@@ -194,14 +188,6 @@ const Home = () => {
 
   return (
     <div className="mx-auto w-90 px-4 py-4 flex flex-col relative">
-      {/* <div>isLocationLoading: {JSON.stringify(isLocationLoading)}</div>
-      <div>
-        isNearbyListingLoading: {JSON.stringify(isNearbyListingLoading)}
-      </div>
-      <div>
-        tailoredLocationService: {JSON.stringify(tailoredLocationService)}
-      </div>
-      <div>nearbyListings: {JSON.stringify(nearbyListings)}</div> */}
       <h2 className="text-xl font-bold tracking-tight text-indigo-900 mx-auto">
         Listings near you
       </h2>
