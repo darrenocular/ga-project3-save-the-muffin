@@ -94,6 +94,17 @@ Please enable location services before using our app for optimum experience.
 
 - Calculating distances between two points on the earth: https://stackoverflow.com/questions/639695/how-to-convert-latitude-or-longitude-to-meters
 - Too Good To Go App (not available in Singapore): https://www.toogoodtogo.com/en-gb
+- Loading spinner: https://loading.io/css/
+- OneMap integration: https://www.onemap.gov.sg/docs/maps/index.html
+- Search bar enter event handler: https://www.geeksforgeeks.org/how-to-get-the-enter-key-in-reactjs/
+- React library to display map and markers: https://react-leaflet.js.org/
+- Automatically refresh access token prior to expiry: https://developer.mozilla.org/en-US/docs/Web/API/setInterval
+- Make location search bar reactive to focus and lose focus: https://javascript.plainenglish.io/how-to-detect-whether-an-input-element-is-focused-within-react-c11ddbd66cab
+- Dynamically center modal: https://stackoverflow.com/questions/17069435/center-fixed-div-with-dynamic-width-css
+- Event handlers for React leaftlet markers: https://stackoverflow.com/questions/40901539/arbitrary-function-on-react-leaflet-marker-click
+- Express-validator isPasswordStrong: https://kiptookorir.medium.com/validation-in-express-with-express-validator-8cdd15d8fe29
+- Validate email is entered: https://ui.dev/validate-email-address-javascript
+- ChatGPT: fix async update one frame late for various features like nearby listings, check duplicate email, protected routes wrapper for role specific pages, automatic refresh access token before expiry, info about JWT claims, React-leaftlet display nearby shops & stale rendering issues, middleware to check authorised transaction by resource owner
 
 ### .env structure (front-end)
 
