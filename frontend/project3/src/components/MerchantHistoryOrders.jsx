@@ -161,10 +161,10 @@ export default function MerchantHistoryOrders() {
                     ) : (
                       <tr>
                         <td colSpan="5" className="p-5 text-center">
-                          <p>No orders history yet...</p>
+                          <p className="text-red-700 text-sm">No past orders</p>
                           <button
                             style={{ width: "12%", marginTop: "0.5rem" }}
-                            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-full"
+                            className="bg-blue-500 hover:bg-blue-700 text-white text-sm font-bold py-2 px-4 rounded w-full"
                             onClick={() => navigate("/listings")}
                           >
                             Go to listings

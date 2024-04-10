@@ -12,6 +12,7 @@ const NavBar = () => {
     appCtx.expirationDate,
     appCtx.role,
     appCtx.id,
+    appCtx.email,
   ]);
 
   return (
@@ -82,14 +83,17 @@ const NavBar = () => {
             )}
           </div>
         </div>
-        <div className="flex space-x-4 mr-4">
+        <div className="flex space-x-4 mr-4 items-center">
           {appCtx.accessToken ? (
-            <NavLink
-              onClick={(event) => appCtx.logOut(event)}
-              className="text-indigo-300 hover:bg-indigo-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium"
-            >
-              Log out
-            </NavLink>
+            <>
+              <div className="text-white text-sm font-bold">{appCtx.email}</div>
+              <NavLink
+                onClick={(event) => appCtx.logOut(event)}
+                className="text-indigo-300 hover:bg-indigo-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium"
+              >
+                Log out
+              </NavLink>
+            </>
           ) : (
             <NavLink
               to="/login"

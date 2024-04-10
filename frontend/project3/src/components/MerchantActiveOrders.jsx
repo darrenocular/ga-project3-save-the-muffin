@@ -138,8 +138,8 @@ export default function MerchantActiveOrders() {
                               {order.purchaseQuantity}
                             </td>
                             <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-left text-sm font-medium sm:pr-6">
-                              <div className="flex flex-col">
-                                <div style={{ width: "60%" }}>
+                              <div className="flex items-center justify-between">
+                                <div className="w-2/3 mr-2">
                                   <button
                                     className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-full"
                                     onClick={() => handleOrderCollected(order)}
@@ -147,9 +147,7 @@ export default function MerchantActiveOrders() {
                                     Order Collected
                                   </button>
                                 </div>
-                                <div
-                                  style={{ width: "60%", marginTop: "0.5rem" }}
-                                >
+                                <div className="w-2/3">
                                   <button
                                     className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded w-full"
                                     onClick={() => handleOrderDelete(order)}
@@ -164,7 +162,9 @@ export default function MerchantActiveOrders() {
                     ) : (
                       <tr>
                         <td colSpan="5" className="p-5 text-center">
-                          <p>No active orders yet...</p>
+                          <p className="text-red-700 text-sm">
+                            No active orders yet...
+                          </p>
                           <button
                             style={{ width: "12%", marginTop: "0.5rem" }}
                             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-full"
