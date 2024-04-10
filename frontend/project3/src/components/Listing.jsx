@@ -38,7 +38,7 @@ const Listing = (props) => {
               </p>
             </div>
             <div>
-              <p className="mt-1 text-ellipsis text-xs font-light leading-5 text-indigo-700 max-h-5 overflow-y-hidden">
+              <p className="mt-1 text-xs font-light leading-5 text-indigo-700 max-h-16 overflow-y-hidden">
                 {props.listing.description || "No description"}
               </p>
             </div>

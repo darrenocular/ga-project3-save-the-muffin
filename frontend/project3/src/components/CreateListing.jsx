@@ -223,6 +223,7 @@ const CreateListing = (props) => {
           setTime("");
 
           props.createdListing(true);
+          props.setSelectedListing(null);
         }
       } else {
         const res = await fetchData(
@@ -244,6 +245,7 @@ const CreateListing = (props) => {
           setTime("");
 
           props.createdListing(true);
+          props.setSelectedListing(null);
         }
       }
     } catch (error) {
