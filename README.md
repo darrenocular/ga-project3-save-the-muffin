@@ -35,13 +35,17 @@ Please enable location services before using our app for optimum experience.
 
 2. The user will be able to search for listings nearby a specified location using the search bar. A map will be displayed showing the user's current location relative to nearby listings in the vicinity. The user can either click on the locator on the map _or_ the listing itself to view further information regarding the listing in a pop-up modal.
 
-![map locator](./screenshots/map-locator.png)
+![search by input](./screenshots/search-by-input.png)
+
+![user location on map](./screenshots/user-location-on-map.png)
+
+![listings-on-map](./screenshots/listings-on-map.png)
+
+3. Alternatively, the user can filter for listings based on areas of Singapore in a dropdown menu _or_ simply see all listings available presently. The map will not show if the user searches for listings via this method.
 
 ![search by area](./screenshots/search-by-area.png)
 
 ![show all listings](./screenshots/show-all-listings.png)
-
-3. Alternatively, the user can filter for listings based on areas of Singapore in a dropdown menu _or_ simply see all listings available presently. The map will not show if the user searches for listings via this method.
 
 4. When the listing modal pops up, the user can add the listing to cart, limited by the quantity made available by the merchant.
 
@@ -73,7 +77,7 @@ Please enable location services before using our app for optimum experience.
 
 ![merchant order history](./screenshots/merchant-order-history.png)
 
-4. On the user-side of the app, when the merchant indicates that an order has been collected, the order will move from the user's "Active Orders" tab to the "Order History" tab. If an order is not collected by the specified collection date, this will be reflected in the user's "Order History" tab, as status "Uncollected".
+4. On the user-side of the app, when the merchant indicates that an order has been collected, the order will move from the user's "Active Orders" tab to the "Order History" tab. If an order is not collected by the specified collection date, this will be reflected in the user's "Order History" tab, as status "Not Collected".
 
 ![user-order-uncollected](./screenshots/user-order-uncollected.png)
 
