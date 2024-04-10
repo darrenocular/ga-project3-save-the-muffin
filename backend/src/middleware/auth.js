@@ -1,7 +1,7 @@
 const jwt = require("jsonwebtoken");
 const { Listings } = require("../models/Listing");
 const CartItem = require("../models/CartItem");
-const { Order } = require("../models/Order");
+const Order = require("../models/Order");
 
 const authUser = (req, res, next) => {
   if (!("authorization" in req.headers)) {
@@ -65,12 +65,6 @@ const authCartOwner = async (req, res, next) => {
       return res.status(403).json({ status: "error", msg: "unauthorized" });
     }
   }
-
-  if (req.body.user) {
-    if (req.body.user !== req.decoded.id) {
-      return res.status(403).json({ status: "error", msg: "unauthorized" });
-    }
-  }
   next();
 };
 
@@ -120,22 +114,8 @@ const authMerchantOrderOwner = async (req, res, next) => {
 };
 
 const authUserOrderOwner = async (req, res, next) => {
-  if (req.body.id) {
-    const order = await Order.findById(req.body.id);
-
-    if (!order) {
-      next();
-    }
-    console.log(order.user.toString());
-    console.log(req.decoded.id);
-    console.log(order.user.toString() === req.decoded.id);
-
-    if (order.user.toString() !== req.decoded.id) {
-      return res.status(403).json({ status: "error", msg: "unauthorized" });
-    }
-  }
-
   if (req.body.user) {
+    console.log(req.body.user);
     if (req.body.user !== req.decoded.id) {
       return res.status(403).json({ status: "error", msg: "unauthorized" });
     }

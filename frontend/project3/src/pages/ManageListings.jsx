@@ -13,7 +13,7 @@ const ManageListings = () => {
     setRefreshListings(true);
   };
   return (
-    <div className={styles.manageListings}>
+    <div className={`flex ${styles.manageListings}`}>
       <CreateListing
         update={update}
         setUpdate={setUpdate}

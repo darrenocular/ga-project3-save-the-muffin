@@ -69,7 +69,7 @@ const DisplayListings = (props) => {
   }, [props.refreshListings]);
 
   return (
-    <div className="flex-col overflow-y-auto w-7/12 p-3 grow">
+    <div className="flex-col overflow-y-auto grow p-3">
       <h2 className="text-base font-semibold leading-7 text-gray-900">
         Your Listings
       </h2>

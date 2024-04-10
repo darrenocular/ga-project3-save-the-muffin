@@ -15,7 +15,9 @@ const Overlay = (props) => {
         <header className={styles.errorHeader}>
           <h2>{props.title}Error</h2>
         </header>
-        <div className={styles.content}>{props.content}</div>
+        <div className="p-3 overflow-y-auto min-h-16 text-gray-900">
+          {props.content}
+        </div>
         <footer className={styles.actions}>
           <button onClick={props.okayClick} className={``}>
             Cancel

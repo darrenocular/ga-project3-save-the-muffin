@@ -42,7 +42,7 @@ const seedOrders = async (req, res) => {
 
 const getOrdersByUserId = async (req, res) => {
   try {
-    const orders = await Orders.find({ user: req.body.id })
+    const orders = await Orders.find({ user: req.body.user })
       .sort({
         "listing.collectionDate": -1,
       })
