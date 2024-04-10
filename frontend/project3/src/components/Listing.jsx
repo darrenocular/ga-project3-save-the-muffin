@@ -63,7 +63,15 @@ const Listing = (props) => {
           <div className="mt-1 leading-5">
             <span className="text-xs text-indigo-700">Collect on </span>
             <br />
-            <span className="text-sm font-medium text-indigo-700">
+            <span
+              className={
+                props.listing?.collectionDate &&
+                props.listing?.collectionDate.split("T")[0] ===
+                  new Date().toISOString().split("T")[0]
+                  ? "text-sm font-medium text-green-700"
+                  : "text-sm font-medium text-indigo-700"
+              }
+            >
               {new Date(props.listing.collectionDate).toLocaleString("en-SG")}
             </span>
           </div>

@@ -20,55 +20,6 @@ const getAllListings = async (req, res) => {
   }
 };
 
-const seedListings = async (req, res) => {
-  try {
-    await Listings.deleteMany();
-
-    await Listings.create([
-      {
-        merchant: "660b73d4f4e248c36c993f2d",
-        name: "Blueberry Muffin",
-        originalPrice: 1.8,
-        discountedPrice: 1.5,
-        quantity: 40,
-        description: "Gluten-free",
-        category: "Pastries",
-        collectionDate: new Date("2024-04-05T17:00:00"),
-        latitude: 1.27590110812862,
-        longitude: 103.842656784977,
-      },
-      {
-        merchant: "660b73d4f4e248c36c993f2d",
-        name: "Banana Walnut Muffin",
-        originalPrice: 2,
-        discountedPrice: 1.7,
-        quantity: 40,
-        description: "Allergy: nuts",
-        category: "Pastries",
-        collectionDate: new Date("2024-04-05T17:00:00"),
-        latitude: 1.27590110812862,
-        longitude: 103.842656784977,
-      },
-      {
-        merchant: "660b7406f4e248c36c993f2f",
-        name: "Nasi Lemak",
-        originalPrice: 3,
-        discountedPrice: 2.5,
-        quantity: 10,
-        description: "Available with or without chilli",
-        category: "Asian",
-        collectionDate: new Date("2024-04-05T12:00:00"),
-        latitude: 1.34522406568893,
-        longitude: 103.712800680774,
-      },
-    ]);
-    res.json({ status: "ok", msg: "seed success" });
-  } catch (error) {
-    console.error(error.message);
-    res.status(400).json({ status: "error", msg: "seed fail" });
-  }
-};
-
 const getAllCategories = async (req, res) => {
   try {
     const categories = await ListingSchema.path("category").enumValues;
@@ -191,6 +142,7 @@ const getNearbyListings = async (req, res) => {
       collectionDate: { $gt: Date.now() },
       quantity: { $gt: 0 },
     })
+      .sort("collectionDate")
       .populate("merchant")
       .exec();
 
@@ -210,7 +162,6 @@ module.exports = {
   updateListingById,
   deleteListingById,
   getListingById,
-  seedListings,
   getListingsByMerchantId,
   getEnum,
   getNearbyListings,

@@ -59,7 +59,6 @@ const register = async (req, res) => {
       if (req.body.description)
         newAccount.merchantDetails.description = req.body.description;
       if (req.body.image) newAccount.merchantDetails.image = req.body.image;
-      console.log(newAccount);
     }
     await Auth.create(newAccount);
 

@@ -1,7 +1,6 @@
 const express = require("express");
 const router = express.Router();
 const {
-  seedOrders,
   getOrdersByUserId,
   addNewOrder,
   getOrdersByMerchantId,
@@ -21,8 +20,6 @@ const {
 } = require("../middleware/auth");
 const { authUser, authMerchant } = require("../middleware/auth");
 const { errorCheck } = require("../validators/errorCheck");
-
-router.get("/orders/seed", seedOrders);
 
 // User routes for orders
 router.post(
