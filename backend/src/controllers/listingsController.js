@@ -3,7 +3,9 @@ const { Auth } = require("../models/Auth");
 
 const getAllListings = async (req, res) => {
   try {
-    const listings = await Listings.find({ quantity: { $gt: 0 } })
+    const listings = await Listings.find({
+      collectionDate: { $gt: Date.now(), { quantity: { $gt: 0 } } },
+    })
       .sort("collectionDate")
       .populate("merchant")
       .exec();

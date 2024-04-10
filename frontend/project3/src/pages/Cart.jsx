@@ -54,10 +54,13 @@ const Cart = () => {
         }
       }
       if (appCtx.errorMessage) {
+        console.log(appCtx.errorMessage);
+        console.log(appCtx.errorMessage.length);
         appCtx.setIsError(true);
+        getCart();
+      } else {
+        navigate("/orders");
       }
-      getCart();
-      navigate("/orders");
     } catch (error) {
       appCtx.setErrorMessage(error.message);
       appCtx.setIsError(true);

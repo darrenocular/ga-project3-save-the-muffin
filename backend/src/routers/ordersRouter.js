@@ -15,8 +15,9 @@ const {
   validateBodyMerchant,
 } = require("../validators/ordersValidator");
 const {
-  authUserOrderOwner,
+  authCartOwner,
   authMerchantOrderOwner,
+  authUserOrderOwner,
 } = require("../middleware/auth");
 const { authUser, authMerchant } = require("../middleware/auth");
 const { errorCheck } = require("../validators/errorCheck");
@@ -35,7 +36,7 @@ router.post(
 router.put(
   "/orders",
   authUser,
-  authUserOrderOwner,
+  authCartOwner,
   validateBodyId,
   errorCheck,
   addNewOrder
