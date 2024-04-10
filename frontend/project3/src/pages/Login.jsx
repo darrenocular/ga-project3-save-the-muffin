@@ -33,6 +33,8 @@ const Login = () => {
         setEmail("");
         setPassword("");
         navigate("/");
+      } else {
+        throw new Error(res.data);
       }
     } catch (error) {
       appCtx.setErrorMessage(error.message);

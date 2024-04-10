@@ -17,11 +17,15 @@ export default function MerchantHistoryOrders() {
       const res = await fetchData(
         "/api/orders/manage",
         "POST",
-        { id: appCtx.id },
+        { merchant: appCtx.id },
         appCtx.accessToken
       );
-      setOrderListing(res.data);
-      setOrderListingLoading(false);
+      if (res.ok) {
+        setOrderListing(res.data);
+        setOrderListingLoading(false);
+      } else {
+        throw new Error(res.data);
+      }
     } catch (error) {
       appCtx.setErrorMessage(error.message);
       appCtx.setIsError(true);

@@ -176,12 +176,6 @@ const CreateListing = (props) => {
       ) {
         throw new Error("Mandatory fields have to be filled");
       }
-      console.log(discountedPrice);
-      console.log(typeof discountedPrice);
-
-      console.log(originalPrice);
-      console.log(typeof originalPrice);
-      console.log(discountedPrice > originalPrice);
 
       if (discountedPrice > originalPrice) {
         throw new Error(
@@ -224,6 +218,8 @@ const CreateListing = (props) => {
 
           props.createdListing(true);
           props.setSelectedListing(null);
+        } else {
+          throw new Error(res.data);
         }
       } else {
         const res = await fetchData(
@@ -246,10 +242,12 @@ const CreateListing = (props) => {
 
           props.createdListing(true);
           props.setSelectedListing(null);
+        } else {
+          throw new Error(res.data);
         }
       }
     } catch (error) {
-      console.error(error.message);
+      console.error(error);
       appCtx.setErrorMessage(error.message);
       appCtx.setIsError(true);
     }
