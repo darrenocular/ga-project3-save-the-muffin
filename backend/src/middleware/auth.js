@@ -57,12 +57,12 @@ const authCartOwner = async (req, res, next) => {
   if (req.body.id) {
     const cart = await CartItem.findById(req.body.id);
 
-    if (!cart) {
-      next();
-    }
-
-    if (cart.user.toString() !== req.decoded.id) {
-      return res.status(403).json({ status: "error", msg: "unauthorized" });
+    if (cart) {
+      if (cart.user.toString() !== req.decoded.id) {
+        return res.status(403).json({ status: "error", msg: "unauthorized" });
+      }
+    } else {
+      return res.status(404).json({ status: "error", msg: "not found" });
     }
   }
   next();
@@ -72,12 +72,12 @@ const authListingOwner = async (req, res, next) => {
   if (req.body.id) {
     const listing = await Listings.findById(req.body.id);
 
-    if (!listing) {
-      next();
-    }
-
-    if (listing.merchant.toString() !== req.decoded.id) {
-      return res.status(403).json({ status: "error", msg: "unauthorized" });
+    if (listing) {
+      if (listing.merchant.toString() !== req.decoded.id) {
+        return res.status(403).json({ status: "error", msg: "unauthorized" });
+      }
+    } else {
+      return res.status(404).json({ status: "error", msg: "not found" });
     }
   }
 
@@ -93,12 +93,12 @@ const authMerchantOrderOwner = async (req, res, next) => {
   if (req.body.id) {
     const order = await Order.findById(req.body.id);
 
-    if (!order) {
-      next();
-    }
-
-    if (order.merchant.toString() !== req.decoded.id) {
-      return res.status(403).json({ status: "error", msg: "unauthorized" });
+    if (order) {
+      if (order.merchant.toString() !== req.decoded.id) {
+        return res.status(403).json({ status: "error", msg: "unauthorized" });
+      }
+    } else {
+      return res.status(404).json({ status: "error", msg: "not found" });
     }
   }
 
