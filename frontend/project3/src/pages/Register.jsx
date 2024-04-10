@@ -4,6 +4,7 @@ import useFetch from "../hooks/useFetch";
 import AppContext from "../context/AppContext";
 import useOneMap from "../hooks/useOneMap";
 import SearchBar from "../components/SearchBar";
+import Logo from "../assets/logo.png";
 
 const Register = () => {
   const fetchData = useFetch();
@@ -171,8 +172,8 @@ const Register = () => {
       <div className="flex min-h-full flex-col justify-center px-6 py-12">
         <div>
           <img
-            className="mx-auto h-10 w-auto"
-            src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
+            className="mx-auto h-40 w-auto"
+            src={Logo}
             alt="Save The Muffin"
           />
           <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-indigo-900">
