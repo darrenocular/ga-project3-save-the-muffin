@@ -33,7 +33,7 @@ Please enable location services before using our app for optimum experience.
 
 ![user home page](./screenshots/user-home.png)
 
-2. The user will be able to search for listings nearby a specified location using the search bar. A map will be displayed showing the user's current location relative to nearby listings in the vicinity. The user can either click on the locator on the map _or_ the listing itself to view further information regarding the listing in a pop-up modal.
+2. The user will be able to search for listings nearby a specified location using the search bar. A map will be displayed showing the specified location and listings in the vicinity. The user can either click on the locator on the map _or_ the listing itself to view further information regarding the listing in a pop-up modal.
 
 ![search by input](./screenshots/search-by-input.png)
 
