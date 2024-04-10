@@ -1,10 +1,20 @@
 {
   "version": 2,
-  "builds": [
+  "routes": [
     {
-      "src": "*.js",
-      "use": "@vercel/node"
+      "src": "/api/(.*)",
+      "dest": "/api/$1"
+    },
+    {
+      "src": "/auth/(.*)",
+      "dest": "/auth/$1"
+    },
+    {
+      "handle": "filesystem"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/server.js"
     }
-  ],
-  "routes": [{ "src": "/(.*)", "dest": "/" }]
+  ]
 }
