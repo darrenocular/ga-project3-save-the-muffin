@@ -23,6 +23,7 @@ function App() {
   const [accessToken, setAccessToken] = useState("");
   const [role, setRole] = useState("");
   const [id, setId] = useState("");
+  const [email, setEmail] = useState("");
   const [expirationDate, setExpirationDate] = useState("");
   const [showLogin, setShowLogin] = useState(true);
   const [isError, setIsError] = useState(false);
@@ -39,6 +40,7 @@ function App() {
     setAccessToken("");
     setRole("");
     setId("");
+    setEmail("");
     if (localStorage.getItem("refreshToken")) {
       localStorage.removeItem("refreshToken");
     }
@@ -84,6 +86,8 @@ function App() {
           setErrorMessage,
           oneMapAccessToken,
           setOneMapAccessToken,
+          email,
+          setEmail,
           logOut,
         }}
       >

@@ -29,6 +29,7 @@ const Login = () => {
         appCtx.setExpirationDate(expirationDate);
         appCtx.setId(decoded.id);
         appCtx.setRole(decoded.role);
+        appCtx.setEmail(email);
         localStorage.setItem("refreshToken", res.data.refresh);
         setEmail("");
         setPassword("");

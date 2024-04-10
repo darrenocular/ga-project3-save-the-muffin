@@ -136,20 +136,23 @@ export default function MerchantActiveOrders() {
                               {order.purchaseQuantity}
                             </td>
                             <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-left text-sm font-medium sm:pr-6">
-                              <div className="flex flex-col">
-                                <button
-                                  className="bg-blue-500 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded w-full"
-                                  onClick={() => handleOrderCollected(order)}
-                                >
-                                  Order Collected
-                                </button>
-
-                                <button
-                                  className="bg-red-500 hover:bg-red-700 text-white font-semibold py-2 px-4 mt-2 rounded w-full"
-                                  onClick={() => handleOrderDelete(order)}
-                                >
-                                  Delete Order
-                                </button>
+                              <div className="flex items-center justify-between">
+                                <div className="w-2/3 mr-2">
+                                  <button
+                                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-full"
+                                    onClick={() => handleOrderCollected(order)}
+                                  >
+                                    Order Collected
+                                  </button>
+                                </div>
+                                <div className="w-2/3">
+                                  <button
+                                    className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded w-full"
+                                    onClick={() => handleOrderDelete(order)}
+                                  >
+                                    Delete Order
+                                  </button>
+                                </div>
                               </div>
                             </td>
                           </tr>
@@ -157,9 +160,9 @@ export default function MerchantActiveOrders() {
                     ) : (
                       <tr>
                         <td colSpan="5" className="p-5 text-center">
-                          <div className="text-gray-500 text-sm	leading-6 p-5">
-                            No active orders yet
-                          </div>
+                          <p className="text-red-700 text-sm">
+                            No active orders yet...
+                          </p>
                           <button
                             className="bg-blue-500 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded"
                             onClick={() => navigate("/listings")}
