@@ -174,8 +174,8 @@ const getNearbyListings = async (req, res) => {
     const KMPerLongitudePerDegreeInSingapore = 111.288;
     const KMPerLatitudePerDegreeWorldwide = 111.32;
 
-    const perKMLongitude = 1 / 111.288;
-    const perKMLatitude = 1 / 111.32;
+    const perKMLongitude = 1 / KMPerLongitudePerDegreeInSingapore;
+    const perKMLatitude = 1 / KMPerLatitudePerDegreeWorldwide;
     let defaultMaxDistance = 2;
 
     const { latitude, longitude, maxDistance = defaultMaxDistance } = req.body;
