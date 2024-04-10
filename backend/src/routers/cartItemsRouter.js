@@ -1,7 +1,6 @@
 const express = require("express");
 const router = express.Router();
 const {
-  seedCart,
   addCartItem,
   getCartByUserId,
   updateCartItem,
@@ -16,7 +15,6 @@ const {
 } = require("../validators/cartItemsValidator");
 const { errorCheck } = require("../validators/errorCheck");
 
-router.get("/cart/seed", seedCart); // seed cart by user id
 router.put(
   "/cart",
   authUser,

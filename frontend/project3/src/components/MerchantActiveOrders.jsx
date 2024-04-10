@@ -158,7 +158,7 @@ export default function MerchantActiveOrders() {
                     ) : (
                       <tr>
                         <td colSpan="5" className="p-5 text-center">
-                          <p className="text-red-700 text-sm">
+                          <p className="text-red-700 text-sm py-5">
                             No active orders yet...
                           </p>
                           <button
