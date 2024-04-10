@@ -43,6 +43,8 @@ const Home = () => {
       if (res.ok) {
         setListings(res.data);
         setFilteredListings(res.data);
+      } else {
+        throw new Error(res.data);
       }
     } catch (error) {
       appCtx.setErrorMessage(error.message);
@@ -55,6 +57,8 @@ const Home = () => {
       const res = await fetchData("/auth/enum");
       if (res.ok) {
         setAreaList(res.data.areas.sort());
+      } else {
+        throw new Error(res.data);
       }
     } catch (error) {
       appCtx.setErrorMessage(res.data);
@@ -110,6 +114,8 @@ const Home = () => {
 
       if (res.ok) {
         appCtx.setOneMapAccessToken(res.data.access_token);
+      } else {
+        throw new Error(res.data);
       }
     } catch (error) {
       setTailoredLocationService(false);

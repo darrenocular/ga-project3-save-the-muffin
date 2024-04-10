@@ -24,6 +24,8 @@ export default function MerchantActiveOrders() {
       if (res.ok) {
         setOrderListing(res.data);
         setOrderListingLoading(false);
+      } else {
+        throw new Error(res.data);
       }
     } catch (error) {
       appCtx.setErrorMessage(error.message);

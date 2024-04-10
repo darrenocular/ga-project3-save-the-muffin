@@ -19,6 +19,8 @@ const DisplayListings = (props) => {
 
       if (res.ok) {
         setMyListings(res.data);
+      } else {
+        throw new Error(res.data);
       }
     } catch (error) {
       appCtx.setErrorMessage(error.message);

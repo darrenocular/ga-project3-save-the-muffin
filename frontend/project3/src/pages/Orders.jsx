@@ -23,6 +23,8 @@ const Orders = () => {
 
       if (res.ok) {
         setOrders(res.data);
+      } else {
+        throw new Error(res.data);
       }
     } catch (error) {
       appCtx.setErrorMessage(res.data);
