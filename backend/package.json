@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node --env-file=.env server",
-    "dev": "nodemon --env-file=.env server"
+    "dev": "nodemon --env-file=.env server",
+    "build": "echo \"No build step required\""
   },
   "keywords": [],
   "author": "",
