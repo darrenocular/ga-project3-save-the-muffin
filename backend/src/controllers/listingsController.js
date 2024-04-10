@@ -188,6 +188,8 @@ const getNearbyListings = async (req, res) => {
     const listings = await Listings.find({
       longitude: { $gte: minLong, $lte: maxLong },
       latitude: { $gte: minLat, $lte: maxLat },
+      collectionDate: { $gt: Date.now() },
+      quantity: { $gt: 0 },
     })
       .populate("merchant")
       .exec();
