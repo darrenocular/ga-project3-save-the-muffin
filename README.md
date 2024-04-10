@@ -31,7 +31,7 @@ Please enable location services before using our app for optimum experience.
 
 1. Upon log in, a user will be directed to the "Home" page, which will, by default, display listings nearby the user (i.e., within a 3km radius). The user's location is obtained via geolocation services provided by the OneMap API (https://www.onemap.gov.sg/apidocs/).
 
-![user home page](./screenshots/home-page.png)
+![user home page](./screenshots/user-home.png)
 
 2. The user will be able to search for listings nearby a specified location using the search bar. A map will be displayed showing the user's current location relative to nearby listings in the vicinity. The user can either click on the locator on the map _or_ the listing itself to view further information regarding the listing in a pop-up modal.
 
@@ -53,6 +53,8 @@ Please enable location services before using our app for optimum experience.
 
 6. The user can view all their orders on the "Orders" page, which contains 2 tabs - an "Active Orders" tab and an "Order History" tab. The "Active Orders" tab displays all orders that have yet to be fulfilled (i.e., not collected by the user), while the "Order History" tab displays all orders that have been fulfilled and completed. For the current version of the app, in-app payment is not supported yet; all payments have to be made directly to merchants upon collection.
 
+![user orders](./screenshots/user-orders.png)
+
 ### User Journey (Merchant)
 
 1. Upon log in, the merchant will also have access to the "Home" page which the user sees. However, certain features will not be available to the merchant (e.g., add to cart)
@@ -65,9 +67,15 @@ Please enable location services before using our app for optimum experience.
 
 ![merchant update listing](./screenshots/merchant-update-listing.png)
 
-3. On the "Orders" page, the merchant can view all orders placed for its listings that are pending collection by users on the "Active Orders" tab. This functions as a dashboard that allows the merchant to manage collection by users. When a user successfully collects and pays for their orders, the merchant can click on the "Collected" button to indicate that an order has been completed. The order will then be moved to the "Order History" tab.
+3. On the "Orders" page, the merchant can view all orders placed for its listings that are pending collection by users on the "Active Orders" tab. This functions as a dashboard that allows the merchant to manage collection by users. When a user successfully collects and pays for their orders, the merchant can click on the "Order Collected" button to indicate that an order has been completed. The order will then be moved to the "Order History" tab.
 
-4. On the user-side of the app, when the merchant indicates that an order has been collected, the order will move from the user's "Active Orders" tab to the "Order History" tab.
+![merchant active orders](./screenshots/merchant-active-orders.png)
+
+![merchant order history](./screenshots/merchant-order-history.png)
+
+4. On the user-side of the app, when the merchant indicates that an order has been collected, the order will move from the user's "Active Orders" tab to the "Order History" tab. If an order is not collected by the specified collection date, this will be reflected in the user's "Order History" tab, as status "Uncollected".
+
+![user-order-uncollected](./screenshots/user-order-uncollected.png)
 
 ## Ice Box
 
