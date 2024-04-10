@@ -35,7 +35,6 @@ function App() {
   };
 
   const logOut = () => {
-    console.log("logging out");
     setExpirationDate("");
     setAccessToken("");
     setRole("");

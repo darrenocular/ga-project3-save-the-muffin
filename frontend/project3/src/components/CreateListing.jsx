@@ -129,9 +129,6 @@ const CreateListing = (props) => {
         setImage(event.target.value);
         break;
       default:
-        console.log(
-          `error, id ${event.target.id}, value: ${event.target.value}`
-        );
         break;
     }
   };
@@ -149,7 +146,6 @@ const CreateListing = (props) => {
       setTime("");
       if (props.update) props.setUpdate(false);
     } catch (error) {
-      console.error(error.message);
       appCtx.setErrorMessage(error.message);
       app.setIsError(error.message);
     }
@@ -159,7 +155,6 @@ const CreateListing = (props) => {
     try {
       event.preventDefault();
       const dateTime = new Date(`${date}T${time}`);
-      console.log(dateTime);
       if (isNaN(dateTime)) {
         throw new Error("Invalid Date");
       }
@@ -197,7 +192,6 @@ const CreateListing = (props) => {
 
       if (props.update) {
         listing.id = props.selectedListing._id;
-        console.log(listing);
         const res = await fetchData(
           "/api/listings",
           "PATCH",
@@ -247,7 +241,6 @@ const CreateListing = (props) => {
         }
       }
     } catch (error) {
-      console.error(error);
       appCtx.setErrorMessage(error.message);
       appCtx.setIsError(true);
     }

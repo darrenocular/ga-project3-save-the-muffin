@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import Listing from "./Listing";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPenToSquare, faX } from "@fortawesome/free-solid-svg-icons";
 

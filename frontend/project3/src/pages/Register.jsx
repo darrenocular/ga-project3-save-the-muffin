@@ -109,7 +109,8 @@ const Register = () => {
         setDuplicateEmailWarning(false);
       }
     } catch (error) {
-      console.error(error.message);
+      appCtx.setErrorMessage(res.data);
+      appCtx.isError(true);
     }
   };
 
@@ -131,13 +132,6 @@ const Register = () => {
       if (accountType === "merchant" && latitude) newUser.latitude = latitude;
       if (accountType === "merchant" && longitude)
         newUser.longitude = longitude;
-
-      if (accountType === "merchant" && latitude && longitude) {
-        console.log(typeof latitude);
-        console.log(typeof longitude);
-      }
-
-      console.log(newUser);
 
       const res = await fetchData("/auth/register", "PUT", newUser, undefined);
       if (res.ok) {

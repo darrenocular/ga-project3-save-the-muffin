@@ -44,7 +44,6 @@ const DisplayListings = (props) => {
         setMyListings(newListings);
       }
     } catch (error) {
-      console.error(error.message);
       appCtx.setErrorMessage(error.message);
       appCtx.setIsError(true);
     }

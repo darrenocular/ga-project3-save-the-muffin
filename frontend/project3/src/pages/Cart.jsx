@@ -2,7 +2,6 @@ import React, { useContext, useState, useEffect } from "react";
 import CartItem from "../components/CartItem";
 import useFetch from "../hooks/useFetch";
 import AppContext from "../context/AppContext";
-// import { addNewOrder } from "../../../../backend/src/controllers/ordersController";
 import { useNavigate } from "react-router-dom";
 
 const Cart = () => {
@@ -45,7 +44,6 @@ const Cart = () => {
           { id: itemsToCheckOut[i]._id },
           appCtx.accessToken
         );
-        console.log(res);
         if (!res.ok) {
           appCtx.setErrorMessage((prev) => [
             ...prev,
@@ -54,8 +52,6 @@ const Cart = () => {
         }
       }
       if (appCtx.errorMessage && appCtx.errorMessage.length > 0) {
-        console.log(appCtx.errorMessage);
-        console.log();
         appCtx.setIsError(true);
         getCart();
       } else {
