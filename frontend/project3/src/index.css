@@ -5,6 +5,7 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   --navbar-height: 4rem;
+  --theme-colour: rgb(67 56 202);
 }
 
 /* http://meyerweb.com/eric/tools/css/reset/ 
