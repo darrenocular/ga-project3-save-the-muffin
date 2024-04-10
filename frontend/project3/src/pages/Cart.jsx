@@ -53,9 +53,9 @@ const Cart = () => {
           ]);
         }
       }
-      if (appCtx.errorMessage) {
+      if (appCtx.errorMessage && appCtx.errorMessage.length > 0) {
         console.log(appCtx.errorMessage);
-        console.log(appCtx.errorMessage.length);
+        console.log();
         appCtx.setIsError(true);
         getCart();
       } else {

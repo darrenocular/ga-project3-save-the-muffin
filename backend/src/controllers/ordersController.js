@@ -114,7 +114,7 @@ const addNewOrder = async (req, res) => {
 const getOrdersByMerchantId = async (req, res) => {
   try {
     const orders = await Orders.find({
-      merchant: req.body.id,
+      merchant: req.body.merchant,
     })
       .populate("user")
       .exec();
