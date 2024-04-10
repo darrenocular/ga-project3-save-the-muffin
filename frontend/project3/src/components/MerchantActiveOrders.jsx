@@ -74,8 +74,6 @@ export default function MerchantActiveOrders() {
     }
   };
 
-  console.log("active", orderListings);
-
   return (
     <div className="px-4 sm:px-6 lg:px-8">
       <div className="mt-8 flow-root">
@@ -124,7 +122,7 @@ export default function MerchantActiveOrders() {
                       orderListings
                         .filter((e) => e.isCollected === false)
                         .map((order) => (
-                          <tr key={order._id}>
+                          <tr key={order._id} className="hover:bg-indigo-50">
                             <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">
                               {order.user.email}
                             </td>
@@ -139,24 +137,19 @@ export default function MerchantActiveOrders() {
                             </td>
                             <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-left text-sm font-medium sm:pr-6">
                               <div className="flex flex-col">
-                                <div style={{ width: "60%" }}>
-                                  <button
-                                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-full"
-                                    onClick={() => handleOrderCollected(order)}
-                                  >
-                                    Order Collected
-                                  </button>
-                                </div>
-                                <div
-                                  style={{ width: "60%", marginTop: "0.5rem" }}
+                                <button
+                                  className="bg-blue-500 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded w-full"
+                                  onClick={() => handleOrderCollected(order)}
                                 >
-                                  <button
-                                    className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded w-full"
-                                    onClick={() => handleOrderDelete(order)}
-                                  >
-                                    Delete Order
-                                  </button>
-                                </div>
+                                  Order Collected
+                                </button>
+
+                                <button
+                                  className="bg-red-500 hover:bg-red-700 text-white font-semibold py-2 px-4 mt-2 rounded w-full"
+                                  onClick={() => handleOrderDelete(order)}
+                                >
+                                  Delete Order
+                                </button>
                               </div>
                             </td>
                           </tr>
@@ -164,10 +157,11 @@ export default function MerchantActiveOrders() {
                     ) : (
                       <tr>
                         <td colSpan="5" className="p-5 text-center">
-                          <p>No active orders yet...</p>
+                          <div className="text-gray-500 text-sm	leading-6 p-5">
+                            No active orders yet
+                          </div>
                           <button
-                            style={{ width: "12%", marginTop: "0.5rem" }}
-                            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-full"
+                            className="bg-blue-500 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded"
                             onClick={() => navigate("/listings")}
                           >
                             Go to listings
@@ -177,7 +171,12 @@ export default function MerchantActiveOrders() {
                     )
                   ) : (
                     <tr>
-                      <td className="p-5">Loading...</td>
+                      <td
+                        colSpan="5"
+                        className="p-5 text-gray-500 text-center text-sm leading-6"
+                      >
+                        Loading...
+                      </td>
                     </tr>
                   )}
                 </tbody>
