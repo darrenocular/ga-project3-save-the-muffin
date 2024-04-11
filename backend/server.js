@@ -20,7 +20,15 @@ const limiter = rateLimit({
 const app = express();
 connectDB();
 
-app.use(cors());
+const corsOptions = {
+  origin: [
+    "https://save-the-muffin-frontend.vercel.app",
+    "http://localhost:5173",
+  ],
+  optionsSuccessStatus: 200, // For legacy browser support
+};
+
+app.use(cors(corsOptions));
 app.use(helmet());
 app.use(limiter);
 app.use(express.json());
