@@ -24,7 +24,7 @@ You can do your bid to reduce food waste. Save The Muffin.
 
 Please enable location services before using our app for optimum experience.
 
-- Deployed app: TBC
+- Deployed app: https://save-the-muffin-frontend.vercel.app/
 - Public board: https://trello.com/b/QsnzXCx7/ga-sei-project-3
 
 ### User Journey (User)
