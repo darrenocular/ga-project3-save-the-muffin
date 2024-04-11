@@ -45,18 +45,13 @@ const Cart = () => {
           appCtx.accessToken
         );
         if (!res.ok) {
-          appCtx.setErrorMessage((prev) => [
-            ...prev,
-            `${itemsToCheckOut[i].listing.name} by ${itemsToCheckOut[i].listing.merchant.merchantDetails.name}: ${res.data}. `,
-          ]);
+          getCart();
+          throw new Error(res.data);
+        } else {
+          getCart();
         }
       }
-      if (appCtx.errorMessage && appCtx.errorMessage.length > 0) {
-        appCtx.setIsError(true);
-        getCart();
-      } else {
-        navigate("/orders");
-      }
+      navigate("/orders");
     } catch (error) {
       appCtx.setErrorMessage(error.message);
       appCtx.setIsError(true);
