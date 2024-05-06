@@ -1,4 +1,4 @@
-# GA SEI Project 3 - Save The Muffin
+# Save The Muffin
 
 ## Introduction
 
